@@ -33,6 +33,10 @@ class RobotContainer {
 	// Cameras
 		
 	//Auto routine
+
+		frc::SendableChooser<int> c_position;
+		frc::SendableChooser<int> c_target;
+		frc::SendableChooser<int> c_allianceOverride;
 };
 
 #endif  // _ROBOT_CONTAINER_H

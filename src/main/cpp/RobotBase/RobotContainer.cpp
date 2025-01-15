@@ -32,7 +32,32 @@ void RobotContainer::ConfigureButtonBindings() {
 
 }
 
+void RobotContainer::ConfigureAutonomousChooser() {
 
+	//Starting position option
+	c_position.AddOption("Team Center", 0);
+	c_position.AddOption("Field Center", 1);
+	c_position.AddOption("Outside of Field", 2);
+
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_position);
+
+	//Position set option
+	c_target.AddOption("10/21", 0); //The front
+	c_target.AddOption("9/20", 1); 
+	c_target.AddOption("8/19", 2);
+	c_target.AddOption("7/18", 3); //The back
+	c_target.AddOption("6/17", 4);
+	c_target.AddOption("11/22", 5);
+
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_target);
+
+	//Alliancee override option
+	c_allianceOverride.SetDefaultOption("--",0);
+	c_allianceOverride.AddOption("Red",1);
+	c_allianceOverride.AddOption("Blue",2);
+
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride);
+}
 
 
 void RobotContainer::ConfigureDashboard() {
