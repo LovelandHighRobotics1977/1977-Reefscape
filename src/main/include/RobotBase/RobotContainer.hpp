@@ -8,9 +8,10 @@ class RobotContainer {
 	public:
 		RobotContainer();
 
-		frc2::Command* GetAutonomousCommand();
+		void setAutoValues();
 		void ConfigureAutonomousChooser();
-
+		frc2::Command* GetAutonomousCommand();
+		
 	private:
 
 	// Configuration functions
@@ -33,7 +34,7 @@ class RobotContainer {
 	// Cameras
 		
 	//Auto routine
-
+		frc2::CommandPtr a_main = AutoFctns::autonomousRoutine(&m_drive);
 		frc::SendableChooser<int> c_position;
 		frc::SendableChooser<int> c_target;
 		frc::SendableChooser<int> c_allianceOverride;

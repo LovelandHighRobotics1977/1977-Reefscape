@@ -9,6 +9,7 @@ RobotContainer::RobotContainer() {
 	ConfigureDashboard();
 	ConfigureButtonBindings();
 	ConfigureDefaultCommands();
+	ConfigureAutonomousChooser();
 }
 
 void RobotContainer::ConfigureDefaultCommands() {
@@ -35,33 +36,75 @@ void RobotContainer::ConfigureButtonBindings() {
 void RobotContainer::ConfigureAutonomousChooser() {
 
 	//Starting position option
-	c_position.AddOption("Team Center", 0);
+	
 	c_position.AddOption("Field Center", 1);
-	c_position.AddOption("Outside of Field", 2);
+	c_position.AddOption("Team Center", 2);
+	c_position.AddOption("Outside of Field", 3);
 
 	frc::Shuffleboard::GetTab("Autonomous").Add(c_position);
+	
 
 	//Position set option
-	c_target.AddOption("10/21", 0); //The front
-	c_target.AddOption("9/20", 1); 
-	c_target.AddOption("8/19", 2);
-	c_target.AddOption("7/18", 3); //The back
-	c_target.AddOption("6/17", 4);
-	c_target.AddOption("11/22", 5);
+	c_target.AddOption("10/21", 1); //The front
+	c_target.AddOption("9/20", 2); 
+	c_target.AddOption("8/19", 3);
+	c_target.AddOption("7/18", 4); //The back
+	c_target.AddOption("6/17", 5);
+	c_target.AddOption("11/22", 6);
 
 	frc::Shuffleboard::GetTab("Autonomous").Add(c_target);
 
 	//Alliancee override option
-	c_allianceOverride.SetDefaultOption("--",0);
+	c_allianceOverride.SetDefaultOption("Base Option",0);
 	c_allianceOverride.AddOption("Red",1);
 	c_allianceOverride.AddOption("Blue",2);
 
 	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride);
+	
 }
 
+void RobotContainer::setAutoValues() {
+	//Set team color, which will provide positive/negative multiplier:
+	if(c_allianceOverride.GetSelected() == 0){
+		if(auto check = frc::DriverStation::GetAlliance()){
+			AutoInfo::colorSet = frc::DriverStation::GetAlliance();
+		}
+		else{
+			AutoInfo::colorSet = frc::DriverStation::Alliance::kRed; //default to red on issue
+		}
+	}else{
+		switch(c_allianceOverride.GetSelected()){
+			case 1: AutoInfo::colorSet = frc::DriverStation::Alliance::kRed;
+				[[fallthrough]];
+			case 2: AutoInfo::colorSet = frc::DriverStation::Alliance::kBlue;
+			
+		}
+	}
+	//Set the starting position, which affects arching angle
+	switch(c_position.GetSelected()){
+		case 1: AutoInfo::positionSet = 1;//true center value
+		case 2: AutoInfo::positionSet = 2;//team center value
+		case 3: AutoInfo::positionSet = 3;//edge value
+		default: AutoInfo::positionSet = 3;
+	}
+	//Set the Apriltag Target and provide speed and rotation modifiers
+	switch(c_target.GetSelected()){
+		case 1: AutoInfo::targetSet = 10; //Based on the red side, will be reconfigured in autonomous file to do both
+		case 2: AutoInfo::targetSet = 9;
+		case 3: AutoInfo::targetSet = 8;
+		case 4: AutoInfo::targetSet = 7;
+		case 5: AutoInfo::targetSet = 6;
+		case 6: AutoInfo::targetSet = 11;
+		default: AutoInfo::targetSet = 10;
+	}
+}
 
 void RobotContainer::ConfigureDashboard() {
 
 	cs::UsbCamera DriveCamera = frc::CameraServer::StartAutomaticCapture(0);
 
+}
+
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+	return RobotContainer::a_main.get();
 }

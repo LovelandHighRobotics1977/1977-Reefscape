@@ -18,37 +18,17 @@ Maximum : Score as much as possible ( CANNOT EXIT ) ( ONLY WORKS ON CENTER )
 namespace AutoInfo{
     //position, target, and color are manually set
     //use enum to set the different potential values aside from color, which will be input with an override
-    static int autonomous_positionSet;
-    static int autonomous_targetSet;
-    static int autonomous_colorSet;
-    enum target{
-        //red
-        tag10,
-        tag11,
-        tag9,
-        tag8,
-        tag7,
-        tag6,
-        //blue
-        tag17,
-        tag18,
-        tag19,
-        tag20,
-        tag21,
-        tag22
-    };
-    enum position{
-        left,
-        right,
-        center
-    };
-    enum color{
-        red,
-        blue
-    };
+    static int positionSet;
+    static int targetSet;
+    static std::optional<frc::DriverStation::Alliance> colorSet;
+    
 }
 //Add either a namespace or class for below
-void mySetAutoRoutine(int position, std::string& target, bool color);
+namespace AutoFctns{
+    void setAutoRoutineValues(int position, int target, std::optional<frc::DriverStation::Alliance> color);
+
+    frc2::CommandPtr autonomousRoutine(DriveSubsystem *drive);
+}
 
 
 
