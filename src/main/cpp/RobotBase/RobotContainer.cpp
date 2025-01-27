@@ -41,8 +41,8 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_position.AddOption("Team Center", 2);
 	c_position.AddOption("Outside of Field", 3);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_position);
-	
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_position).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
+	//
 
 	//Position set option
 	c_target.AddOption("10/21", 1); //The front
@@ -52,14 +52,14 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_target.AddOption("6/17", 5);
 	c_target.AddOption("11/22", 6);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_target);
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_target).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
 
 	//Alliancee override option
 	c_allianceOverride.SetDefaultOption("Base Option",0);
 	c_allianceOverride.AddOption("Red",1);
 	c_allianceOverride.AddOption("Blue",2);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride);
+	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
 	
 }
 
@@ -89,13 +89,20 @@ void RobotContainer::setAutoValues() {
 	}
 	//Set the Apriltag Target and provide speed and rotation modifiers
 	switch(c_target.GetSelected()){
-		case 1: AutoInfo::targetSet = 10; //Based on the red side, will be reconfigured in autonomous file to do both
-		case 2: AutoInfo::targetSet = 9;
-		case 3: AutoInfo::targetSet = 8;
-		case 4: AutoInfo::targetSet = 7;
-		case 5: AutoInfo::targetSet = 6;
-		case 6: AutoInfo::targetSet = 11;
-		default: AutoInfo::targetSet = 10;
+		case 1: AutoInfo::targetSetR = 10; //set red target
+				AutoInfo::targetSetB = 21; //set blue target
+		case 2: AutoInfo::targetSetR = 9;
+				AutoInfo::targetSetB = 20;
+		case 3: AutoInfo::targetSetR = 8;
+				AutoInfo::targetSetB = 19;
+		case 4: AutoInfo::targetSetR = 7;
+				AutoInfo::targetSetB = 18;
+		case 5: AutoInfo::targetSetR = 6;
+				AutoInfo::targetSetB = 17;
+		case 6: AutoInfo::targetSetR = 11;
+				AutoInfo::targetSetB = 22;
+		default: AutoInfo::targetSetR = 10;
+				AutoInfo::targetSetB = 21;
 	}
 }
 

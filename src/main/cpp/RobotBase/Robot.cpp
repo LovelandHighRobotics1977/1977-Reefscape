@@ -16,6 +16,8 @@ void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
 	frc::Timer().Restart();
+	//RobotContainer().setAutoValues();
+	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetR, AutoInfo::targetSetB, AutoInfo::colorSet);
 	m_autonomousCommand = m_container.GetAutonomousCommand(); //Likely not going to use, delete later
 	//m_autonomousCommand = RobotContainer::a_main; //sets the auto command to the one and only.  Must change if more get added
 	//add new way to get autonomous command

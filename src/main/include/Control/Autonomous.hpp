@@ -19,13 +19,14 @@ namespace AutoInfo{
     //position, target, and color are manually set
     //use enum to set the different potential values aside from color, which will be input with an override
     static int positionSet;
-    static int targetSet;
+    static int targetSetR;
+    static int targetSetB;
     static std::optional<frc::DriverStation::Alliance> colorSet;
     
 }
 //Add either a namespace or class for below
 namespace AutoFctns{
-    void setAutoRoutineValues(int position, int target, std::optional<frc::DriverStation::Alliance> color);
+    void setAutoRoutineValues(int position, int targetR, int targetB, std::optional<frc::DriverStation::Alliance> color);
 
     frc2::CommandPtr autonomousRoutine(DriveSubsystem *drive);
 }

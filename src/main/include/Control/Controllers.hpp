@@ -96,8 +96,8 @@ class Driver : public frc2::SubsystemBase {
 			frc::SlewRateLimiter<units::dimensionless::scalar> m_rotateLimiter{3 / 1_ms};
 
 			double forward_deadzone = 0.1;
-			double strafe_deadzone  = 0.1;
-			double rotate_deadzone  = 0.05;
+			double strafe_deadzone  = 0.15;
+			double rotate_deadzone  = 0.06;
 	};
 
 class Operator : public frc2::SubsystemBase {
