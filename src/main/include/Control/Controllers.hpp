@@ -50,7 +50,7 @@ class Driver : public frc2::SubsystemBase {
 				throttle = (-m_Joystick.GetZ() + 1) / 2;
 
 				forward = m_Joystick.GetY();
-				strafe = -m_Joystick.GetX();
+				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetRawAxis(5);
 
 
@@ -69,7 +69,7 @@ class Driver : public frc2::SubsystemBase {
 				throttle = (-m_Joystick.GetThrottle() + 1) / 2;
 
 				forward = m_Joystick.GetY();
-				strafe = -m_Joystick.GetX();
+				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetTwist();
 			}
 
@@ -96,8 +96,8 @@ class Driver : public frc2::SubsystemBase {
 			frc::SlewRateLimiter<units::dimensionless::scalar> m_rotateLimiter{3 / 1_ms};
 
 			double forward_deadzone = 0.1;
-			double strafe_deadzone  = 0.15;
-			double rotate_deadzone  = 0.06;
+			double strafe_deadzone  = 0.25;
+			double rotate_deadzone  = 0.1;
 	};
 
 class Operator : public frc2::SubsystemBase {
@@ -105,8 +105,25 @@ class Operator : public frc2::SubsystemBase {
 
 		Operator(const int port):m_XboxController{port}{};
 
+		bool shootCoral;
+		bool pickUpAlgae;
+		bool winchDown;
+		bool winchUp;
+		bool dropAlgae;
+		bool punchAlgae;
+		bool dropPunch;
+
+
 		void update(){
-			//shooting code goes here
+			pickUpAlgae = m_XboxController.GetAButton();
+			dropAlgae = m_XboxController.GetXButton();
+			shootCoral = m_XboxController.GetBButton();
+			punchAlgae = m_XboxController.GetYButton();
+			dropPunch = (m_XboxController.GetPOV() == 1);
+
+			winchDown = m_XboxController.GetLeftBumperButton();
+			winchDown = m_XboxController.GetRightBumperButton();
+
 		}
 
 		

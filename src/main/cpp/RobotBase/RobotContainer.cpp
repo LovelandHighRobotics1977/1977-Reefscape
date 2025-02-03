@@ -25,11 +25,39 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
 	));
+	/*
+	m_mechanism.SetDefaultCommand(frc2::RunCommand( 
+		[this] { m_mechanism.alignArm(false); },
+		{&m_mechanism}
+	));
+	*/
 }
 
 void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
+
+	frc2::Trigger shootCoral([this] { return m_operator.shootCoral; });
+	shootCoral.WhileTrue(m_mechanism.coralRev().ToPtr());
+
+	frc2::Trigger pickUpAlgae([this] { return m_operator.pickUpAlgae; });
+	pickUpAlgae.WhileTrue(m_mechanism.algaeRev().ToPtr());
+
+	frc2::Trigger dropAlgae([this] { return m_operator.dropAlgae; });
+	dropAlgae.WhileTrue(m_mechanism.algaeRevReverse().ToPtr());
+
+	frc2::Trigger punchAlgae([this] { return m_operator.punchAlgae; });
+	punchAlgae.OnTrue(m_mechanism.algaePunch().ToPtr());
+
+	frc2::Trigger dropPunch([this] { return m_operator.dropPunch; });
+	dropPunch.OnTrue(m_mechanism.algaePunchDrop().ToPtr());
+/*
+	frc2::Trigger winchDown([this] { return m_operator.winchDown; });
+	winchDown.WhileTrue(m_mechanism.winchDown().ToPtr());
+
+	frc2::Trigger winchUp([this] { return m_operator.winchUp; });
+	winchUp.WhileTrue(m_mechanism.winchUp().ToPtr());
+*/
 
 }
 
