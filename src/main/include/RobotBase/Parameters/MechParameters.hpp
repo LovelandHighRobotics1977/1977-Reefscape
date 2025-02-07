@@ -2,7 +2,6 @@
 #define _MECH_PARAMETERS_H
 
 #include "RobotBase/specifications/RobotSpecifications.hpp"
-
 namespace Mechanism {
 	namespace Algae{
 		static constexpr int Intake = 14;

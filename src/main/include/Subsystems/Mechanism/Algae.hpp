@@ -5,7 +5,7 @@
 
 class AlgaeIntake : public frc2::SubsystemBase {
 	public:
-
+	
 		AlgaeIntake();
 
 		void setAlgaeIntake(double speed);

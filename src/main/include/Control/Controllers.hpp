@@ -106,6 +106,7 @@ class Operator : public frc2::SubsystemBase {
 		Operator(const int port):m_XboxController{port}{};
 
 		bool shootCoral;
+		bool reverseCoral;
 		bool pickUpAlgae;
 		bool winchDown;
 		bool winchUp;
@@ -118,10 +119,12 @@ class Operator : public frc2::SubsystemBase {
 			pickUpAlgae = m_XboxController.GetAButton();
 			dropAlgae = m_XboxController.GetXButton();
 			shootCoral = m_XboxController.GetBButton();
-			punchAlgae = m_XboxController.GetYButton();
-			dropPunch = (m_XboxController.GetPOV() == 1);
+			reverseCoral = m_XboxController.GetYButton();
 
-			winchDown = m_XboxController.GetLeftBumperButton();
+			punchAlgae = m_XboxController.GetLeftTriggerAxis() > 0.1;
+			dropPunch = m_XboxController.GetRightTriggerAxis() > 0.1;
+
+			winchUp = m_XboxController.GetLeftBumperButton();
 			winchDown = m_XboxController.GetRightBumperButton();
 
 		}

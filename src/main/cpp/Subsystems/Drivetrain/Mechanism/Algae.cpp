@@ -8,7 +8,7 @@ AlgaeIntake::AlgaeIntake() : m_algaeIntakeMotor{Mechanism::Algae::Intake}{
 }
 
 AlgaeWinch::AlgaeWinch() : m_winch{Mechanism::Algae::Angle::Winch}{
-    winchMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+    winchMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     winchMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     m_winch.GetConfigurator().Apply(winchMotorConfig);
 }

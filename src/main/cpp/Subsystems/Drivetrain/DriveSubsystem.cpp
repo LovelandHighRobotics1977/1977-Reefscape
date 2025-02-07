@@ -83,7 +83,7 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
 frc::Rotation2d DriveSubsystem::GetHeading(){
 	switch(frc::DriverStation::GetAlliance().value()){
 		case frc::DriverStation::kRed:
-			return units::degree_t{-Gyro::GetInstance()->ahrs.GetYaw()};
+			return units::degree_t{Gyro::GetInstance()->ahrs.GetYaw()};
 			break;
 
 		case frc::DriverStation::kBlue:

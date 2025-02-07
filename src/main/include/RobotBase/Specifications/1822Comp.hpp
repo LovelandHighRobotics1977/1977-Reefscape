@@ -106,44 +106,7 @@ namespace Drivetrain {
 				};
 			}
 		}
-	} /*
-	Was FL: static constexpr int Drive = 5;  //2, 
-				static constexpr int Angle = 6; //3
-				static constexpr int Encoder = 7; //4
-				static constexpr units::turn_t MagnetOffset = 0.299805_tr; //0.434082
-	Was FR: static constexpr int Drive = 2; //11
-				static constexpr int Angle = 3; //12
-				static constexpr int Encoder = 4; //13 
-				static constexpr units::turn_t MagnetOffset = 0.434082_tr; //0.413086
-	Was RL: static constexpr int Drive = 11; //11
-				static constexpr int Angle = 12; 
-				static constexpr int Encoder = 13; //10
-				static constexpr units::turn_t MagnetOffset = 0.413086_tr; //0.434082
-	Was RR: static constexpr int Drive = 8; //11
-				static constexpr int Angle = 9; //12
-				static constexpr int Encoder = 10; //13
-				static constexpr units::turn_t MagnetOffset = 0.537354_tr; //0.413086
-	*/
-
-	/*
-	Other working version:
-	FL: static constexpr int Drive = 8; //11
-				static constexpr int Angle = 9; //12
-				static constexpr int Encoder = 10; //13
-				static constexpr units::turn_t MagnetOffset = 0.537354_tr; //0.413086
-	FR: static constexpr int Drive = 11; //11
-				static constexpr int Angle = 12; 
-				static constexpr int Encoder = 13; //10
-				static constexpr units::turn_t MagnetOffset = 0.413086_tr; //0.434082
-	RL: static constexpr int Drive = 2; //11
-				static constexpr int Angle = 3; //12
-				static constexpr int Encoder = 4; //13 
-				static constexpr units::turn_t MagnetOffset = 0.434082_tr; //0.413086
-	RR: static constexpr int Drive = 5;  //2, 
-				static constexpr int Angle = 6; //3
-				static constexpr int Encoder = 7; //4
-				static constexpr units::turn_t MagnetOffset = 0.299805_tr; //0.434082
-	*/
+	} 
 	namespace Movement {
 		namespace Maximum {
 			namespace Linear {

@@ -11,8 +11,9 @@ class MechFunctions : public frc2::SubsystemBase {
 		frc2::StartEndCommand algaeRev();
 		frc2::StartEndCommand algaeRevReverse();
 		frc2::StartEndCommand coralRev();
-		frc2::StartEndCommand winchUp();
-		frc2::StartEndCommand winchDown();
+		frc2::StartEndCommand coralRevReverse();
+		frc2::SequentialCommandGroup winchUp();
+		frc2::SequentialCommandGroup winchDown();
 
 		frc2::SequentialCommandGroup algaePunch();
 		frc2::SequentialCommandGroup algaePunchDrop();
