@@ -4,6 +4,21 @@
 
 #include "Subsystems/Drivetrain/DriveSubsystem.hpp"
 #include "Headers/Headers.hpp"
+double sideMove;
+double distance;
+double rotation;
+double distanceTarget;
+double rotationTarget;
+double sideMoveTarget;
+double errorVal;
+double cTarget;
+// storage variables
+double sideAmount;
+double distanceAmount;
+double RotationAmount;
+units::velocity::feet_per_second_t fowardSpeed;
+units::velocity::feet_per_second_t sideSpeed;
+units::angular_velocity::degrees_per_second_t rotationSpeed;
 
 DriveSubsystem::DriveSubsystem()
    :m_frontLeft{Drivetrain::Module::Front::Left::Drive,
@@ -83,7 +98,7 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
 frc::Rotation2d DriveSubsystem::GetHeading(){
 	switch(frc::DriverStation::GetAlliance().value()){
 		case frc::DriverStation::kRed:
-			return units::degree_t{-Gyro::GetInstance()->ahrs.GetYaw()};
+			return units::degree_t{Gyro::GetInstance()->ahrs.GetYaw()};
 			break;
 
 		case frc::DriverStation::kBlue:
@@ -118,4 +133,61 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 	data.positions[3] = m_rearRight.GetPosition();
 
 	m_odometry.ResetPosition(data.angle, data.positions, pose);
+}
+
+frc2::StartEndCommand DriveSubsystem::coralAim(DriveSubsystem *drive) {
+	sideMove =  nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("targetpose_cameraspace",{})[0];
+	distance =  nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("targetpose_cameraspace",{})[1];
+	rotation =  nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("targetpose_cameraspace",{})[5];
+	distanceTarget = 0.02;
+	sideMoveTarget = 0.02;
+	rotationTarget = 0.8;
+	errorVal=0.1;
+	cTarget = nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tid", -1);
+	
+	if ((cTarget>=7 && cTarget<=11 )|| (cTarget>=17 && cTarget<=22)){
+		if(sideMove<=sideMoveTarget+errorVal){
+			sideAmount=sideMoveTarget-sideMove;
+			sideSpeed = 3_fps;
+			return frc2::StartEndCommand(
+				[drive] { drive->Drive({0_fps, 3_fps, 0_deg_per_s, 0});}, {drive},
+				[drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}
+			);
+		}else if (sideMove>=sideMoveTarget-errorVal) {
+			sideAmount=sideMove-sideMoveTarget;
+			sideSpeed = -3_fps;
+			return frc2::StartEndCommand(
+				[drive] { drive->Drive({0_fps, -3_fps, 0_deg_per_s, 0});}, {drive},
+				[drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}
+			);
+		}
+		else if(distance<=distanceTarget+errorVal){
+			distanceAmount=distanceTarget-distance;
+			fowardSpeed = 3_fps;
+			return frc2::StartEndCommand(
+				[drive] { drive->Drive({3_fps, 0_fps, 0_deg_per_s, 0});}, {drive},
+				[drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}
+			);
+		}
+		
+		/*else if (distance>=distanceTarget-errorVal) {
+		//	distanceAmount=distance-distanceTarget;
+		//	fowardSpeed = -3_fps;
+		//}
+		else if(rotation<=rotationTarget+errorVal){
+			RotationAmount=rotationTarget-rotation;
+			rotationSpeed = 5_deg_per_s;
+		} else if (rotation>=rotationTarget-errorVal) {
+			RotationAmount=rotation-rotationTarget;
+			rotationSpeed = -5_deg_per_s;
+		}
+		*/
+		/*
+		frc2::RunCommand([drive] { drive->Drive({0_fps, (1_fps * finalMoveMult), 0_deg_per_sec, 0});}, {drive});
+		frc2::WaitCommand(1_s);
+		frc2::RunCommand([drive] { drive->Drive({0_fps, 0, 0_deg_per_sec, 0});}, {drive});
+		*/
+	}
+
+	
 }

@@ -36,6 +36,7 @@ SwerveModule::SwerveModule(const int driveMotorID,     const int angleMotorID,  
 
 	angleEncoderConfig.MagnetOffset = 1_tr-magnetOffset; //was 1-magnetOffset.value();, removing .value() and adding _tr to the one fixed a compile error
 	angleEncoderConfig.AbsoluteSensorDiscontinuityPoint = 1_tr;
+	angleEncoderConfig.SensorDirection = ctre::phoenix6::signals::InvertedValue::Clockwise_Positive;
 	m_angleEncoder.GetConfigurator().Apply(angleEncoderConfig);
 }
 
@@ -56,7 +57,7 @@ frc::SwerveModulePosition SwerveModule::GetPosition() {
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState) {
 
 	// Optimize the reference state to avoid spinning further than 90 degrees
-	state = frc::SwerveModuleState::Optimize(referenceState, units::degree_t{m_angleEncoder.GetAbsolutePosition().GetValue()}); 
+	state = frc::SwerveModuleState::Optimize(referenceState, units::degree_t{m_angleEncoder.GetAbsolutePosition().GetValue()});  
 	// Set the motor outputs.
 	m_angleMotor.SetControl(ctre::phoenix6::controls::PositionDutyCycle{units::turn_t{state.angle.Degrees()}});
 	m_driveMotor.Set((state.speed / Drivetrain::Movement::Maximum::Linear::Velocity).value());
