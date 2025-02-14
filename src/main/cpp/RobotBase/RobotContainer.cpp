@@ -25,11 +25,42 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
 	));
+	/*
+	m_mechanism.SetDefaultCommand(frc2::RunCommand( 
+		[this] { m_mechanism.alignArm(false); },
+		{&m_mechanism}
+	));
+	*/
 }
 
 void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
+
+	frc2::Trigger shootCoral([this] { return m_operator.shootCoral; });
+	shootCoral.WhileTrue(m_mechanism.coralRev().ToPtr());
+
+	frc2::Trigger pickUpAlgae([this] { return m_operator.pickUpAlgae; });
+	pickUpAlgae.WhileTrue(m_mechanism.algaeRev().ToPtr());
+
+	frc2::Trigger dropAlgae([this] { return m_operator.dropAlgae; });
+	dropAlgae.WhileTrue(m_mechanism.algaeRevReverse().ToPtr());
+
+	frc2::Trigger punchAlgae([this] { return m_operator.punchAlgae; });
+	punchAlgae.OnTrue(m_mechanism.algaePunch().ToPtr());
+
+	frc2::Trigger dropPunch([this] { return m_operator.dropPunch; });
+	dropPunch.OnTrue(m_mechanism.algaePunchDrop().ToPtr());
+
+	frc2::Trigger reverseCoral([this] { return m_operator.reverseCoral; });
+	reverseCoral.WhileTrue(m_mechanism.coralRevReverse().ToPtr());
+
+	frc2::Trigger winchUp([this] { return m_operator.winchUp; });
+	winchUp.OnTrue(m_mechanism.winchUp().ToPtr());
+
+	frc2::Trigger winchDown([this] { return m_operator.winchDown; });
+	winchDown.OnTrue(m_mechanism.winchDown().ToPtr());
+
 
 }
 
@@ -41,8 +72,8 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_position.AddOption("Team Center", 2);
 	c_position.AddOption("Outside of Field", 3);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_position).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
-	//
+	frc::SmartDashboard::PutData("Auto Position", &c_position);
+	//create c_position dropdown menu
 
 	//Position set option
 	c_target.AddOption("10/21", 1); //The front
@@ -52,15 +83,14 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_target.AddOption("6/17", 5);
 	c_target.AddOption("11/22", 6);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_target).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
+	frc::SmartDashboard::PutData("Auto Target", &c_target);
 
 	//Alliancee override option
 	c_allianceOverride.SetDefaultOption("Base Option",0);
 	c_allianceOverride.AddOption("Red",1);
 	c_allianceOverride.AddOption("Blue",2);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
-	
+	frc::SmartDashboard::PutData("Alliance Override", &c_allianceOverride);
 }
 
 void RobotContainer::setAutoValues() {

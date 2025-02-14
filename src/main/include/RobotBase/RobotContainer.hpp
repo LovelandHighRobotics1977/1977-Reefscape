@@ -3,6 +3,7 @@
 
 #include "Headers/Headers.hpp"
 #include "Control/Autonomous.hpp"
+#include "subsystems/Mechanism/MechFunctions.hpp"
 
 class RobotContainer {
 	public:
@@ -25,6 +26,7 @@ class RobotContainer {
 
 	// Subsystems
 		DriveSubsystem m_drive;
+		MechFunctions m_mechanism;
 
 
 	// Network Tables

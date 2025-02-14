@@ -1,4 +1,5 @@
-#include "subsystems/Drivetrain/Commands.hpp"
+#include "Subsystems/Drivetrain/Commands.hpp"
+
 
 frc2::SequentialCommandGroup SwerveCommand::FollowPath(DriveSubsystem *drive, frc::Pose2d startPose, std::vector<frc::Translation2d> waypoints, frc::Pose2d endPose) {
 	
@@ -33,3 +34,4 @@ frc2::SequentialCommandGroup SwerveCommand::FollowPath(DriveSubsystem *drive, fr
 frc2::InstantCommand SwerveCommand::ResetOdometry(DriveSubsystem *drive, frc::Pose2d pose) {
 	return frc2::InstantCommand([drive, pose] { drive->ZeroOdometry(pose); });
 }
+

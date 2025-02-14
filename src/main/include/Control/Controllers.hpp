@@ -4,6 +4,7 @@
 #include "Headers/Libraries.hpp"
 
 #include "RobotBase/Specifications/RobotSpecifications.hpp"
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 class Driver : public frc2::SubsystemBase {
 	public:
@@ -27,6 +28,9 @@ class Driver : public frc2::SubsystemBase {
 		double strafe;  
 		double rotate;
 
+		bool leftCoral;
+		bool rightCoral;
+
 
 		/**
 		 * Update the controller variables 
@@ -48,10 +52,11 @@ class Driver : public frc2::SubsystemBase {
 				coast_mode_toggle = m_Joystick.GetRawButton(5);
 
 				throttle = (-m_Joystick.GetZ() + 1) / 2;
-
-				forward = m_Joystick.GetY();
-				strafe = -m_Joystick.GetX();
-				rotate = m_Joystick.GetRawAxis(5);
+				if(!targetNearestAprilTag){
+					forward = m_Joystick.GetY();
+					strafe = m_Joystick.GetX();
+					rotate = m_Joystick.GetRawAxis(5);
+				}
 
 
 				targetNearestAprilTag = m_Joystick.GetRawButton(4);
@@ -64,27 +69,41 @@ class Driver : public frc2::SubsystemBase {
 
 				trigger_one = m_Joystick.GetRawButton(1);
 
-				coast_mode_toggle = m_Joystick.GetRawButton(4);
+				coast_mode_toggle = m_Joystick.GetRawButton(5);
 
 				throttle = (-m_Joystick.GetThrottle() + 1) / 2;
 
 				forward = m_Joystick.GetY();
-				strafe = -m_Joystick.GetX();
+				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetTwist();
+
+				leftCoral = m_Joystick.GetRawButton(6);
+				rightCoral = m_Joystick.GetRawButton(4);
 			}
 
 
-			// Controller values and optimizations
-
-			forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
-			strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
 			
-			if(trigger_one && !trigger_two){
-				rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
-			}else if(trigger_one && trigger_two){
-				rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+			if(leftCoral || rightCoral){
+				//set robot speed values appropriate to the nearest april tag
+				AimFunctions::determineValues();
+
+
+				forward = AimFunctions::getForwardSpeed();
+				strafe = AimFunctions::getSideSpeed();
+				rotate = AimFunctions::getRotationSpeed();
+
 			}else{
-				rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				// Controller values and optimizations
+				forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
+				strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
+				
+				if(trigger_one && !trigger_two){
+					rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else if(trigger_one && trigger_two){
+					rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else{
+					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}
 			}
 		}
 
@@ -96,8 +115,8 @@ class Driver : public frc2::SubsystemBase {
 			frc::SlewRateLimiter<units::dimensionless::scalar> m_rotateLimiter{3 / 1_ms};
 
 			double forward_deadzone = 0.1;
-			double strafe_deadzone  = 0.15;
-			double rotate_deadzone  = 0.06;
+			double strafe_deadzone  = 0.25;
+			double rotate_deadzone  = 0.1;
 	};
 
 class Operator : public frc2::SubsystemBase {
@@ -105,8 +124,28 @@ class Operator : public frc2::SubsystemBase {
 
 		Operator(const int port):m_XboxController{port}{};
 
+		bool shootCoral;
+		bool reverseCoral;
+		bool pickUpAlgae;
+		bool winchDown;
+		bool winchUp;
+		bool dropAlgae;
+		bool punchAlgae;
+		bool dropPunch;
+
+
 		void update(){
-			//shooting code goes here
+			pickUpAlgae = m_XboxController.GetAButton();
+			dropAlgae = m_XboxController.GetXButton();
+			shootCoral = m_XboxController.GetBButton();
+			reverseCoral = m_XboxController.GetYButton();
+
+			punchAlgae = m_XboxController.GetLeftTriggerAxis() > 0.1;
+			dropPunch = m_XboxController.GetRightTriggerAxis() > 0.1;
+
+			winchUp = m_XboxController.GetLeftBumperButton();
+			winchDown = m_XboxController.GetRightBumperButton();
+
 		}
 
 		
