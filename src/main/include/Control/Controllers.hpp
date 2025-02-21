@@ -4,6 +4,7 @@
 #include "Headers/Libraries.hpp"
 
 #include "RobotBase/Specifications/RobotSpecifications.hpp"
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 class Driver : public frc2::SubsystemBase {
 	public:
@@ -27,6 +28,12 @@ class Driver : public frc2::SubsystemBase {
 		double strafe;  
 		double rotate;
 
+		bool leftCoral;
+		bool rightCoral;
+
+		bool leftRelease;
+		bool rightRelease;
+
 
 		/**
 		 * Update the controller variables 
@@ -48,10 +55,11 @@ class Driver : public frc2::SubsystemBase {
 				coast_mode_toggle = m_Joystick.GetRawButton(5);
 
 				throttle = (-m_Joystick.GetZ() + 1) / 2;
-
-				forward = m_Joystick.GetY();
-				strafe = m_Joystick.GetX();
-				rotate = m_Joystick.GetRawAxis(5);
+				if(!targetNearestAprilTag){
+					forward = m_Joystick.GetY();
+					strafe = m_Joystick.GetX();
+					rotate = m_Joystick.GetRawAxis(5);
+				}
 
 
 				targetNearestAprilTag = m_Joystick.GetRawButton(4);
@@ -64,27 +72,44 @@ class Driver : public frc2::SubsystemBase {
 
 				trigger_one = m_Joystick.GetRawButton(1);
 
-				coast_mode_toggle = m_Joystick.GetRawButton(4);
+				coast_mode_toggle = m_Joystick.GetRawButton(5);
 
 				throttle = (-m_Joystick.GetThrottle() + 1) / 2;
 
 				forward = m_Joystick.GetY();
 				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetTwist();
+
+				rightCoral = m_Joystick.GetRawButton(6);
+				leftCoral = m_Joystick.GetRawButton(4);
+
+				leftRelease = m_Joystick.GetRawButtonReleased(4);
+				rightRelease = m_Joystick.GetRawButtonReleased(6);
 			}
 
 
-			// Controller values and optimizations
-
-			forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
-			strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
 			
-			if(trigger_one && !trigger_two){
-				rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
-			}else if(trigger_one && trigger_two){
-				rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+			if(leftCoral || rightCoral){
+				//set robot speed values appropriate to the nearest april tag
+				AimFunctions::determineValues(leftCoral);
+
+
+				forward = AimFunctions::getForwardSpeed();
+				strafe = AimFunctions::getSideSpeed();
+				rotate = AimFunctions::getRotationSpeed();
+
 			}else{
-				rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				// Controller values and optimizations
+				forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
+				strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
+				
+				if(trigger_one && !trigger_two){
+					rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else if(trigger_one && trigger_two){
+					rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else{
+					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}
 			}
 		}
 

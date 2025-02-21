@@ -66,8 +66,8 @@ namespace Drivetrain {
 			namespace Left {
 				static constexpr int Drive = 11;
 				static constexpr int Angle = 12;
-				static constexpr int Encoder = 13;
-				static constexpr units::turn_t MagnetOffset = 0.009521_tr;
+				static constexpr int Encoder = 13; //13
+				static constexpr units::turn_t MagnetOffset = 0.034668_tr; //0.53516
 				static const frc::Translation2d Location = {
 					( + (((Measurements::Frame::length)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( + (((Measurements::Frame::width)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition
@@ -76,8 +76,8 @@ namespace Drivetrain {
 			namespace Right {
 				static constexpr int Drive = 2;
 				static constexpr int Angle = 3;
-				static constexpr int Encoder = 4;
-				static constexpr units::turn_t MagnetOffset = 0.065674_tr;
+				static constexpr int Encoder = 4; //4
+				static constexpr units::turn_t MagnetOffset = 0.581543_tr;
 				static const frc::Translation2d Location = {
 					( + (((Measurements::Frame::length)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( - (((Measurements::Frame::width)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition
@@ -89,7 +89,7 @@ namespace Drivetrain {
 				static constexpr int Drive = 8;
 				static constexpr int Angle = 9;
 				static constexpr int Encoder = 10;
-				static constexpr units::turn_t MagnetOffset = 0.414795_tr;
+				static constexpr units::turn_t MagnetOffset = 0.938477_tr;
 				static const frc::Translation2d Location = {
 					( - (((Measurements::Frame::length)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( + (((Measurements::Frame::width)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition
@@ -99,7 +99,7 @@ namespace Drivetrain {
 				static constexpr int Drive = 5;
 				static constexpr int Angle = 6;
 				static constexpr int Encoder = 7;
-				static constexpr units::turn_t MagnetOffset = 0.963867_tr;
+				static constexpr units::turn_t MagnetOffset = 0.494141_tr;	
 				static const frc::Translation2d Location = {
 					( - (((Measurements::Frame::length)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( - (((Measurements::Frame::width)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition

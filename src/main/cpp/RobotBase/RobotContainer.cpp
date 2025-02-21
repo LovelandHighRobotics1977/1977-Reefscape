@@ -4,6 +4,7 @@
 
 #include "RobotBase/RobotContainer.hpp"
 #include "headers/Headers.hpp"
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 RobotContainer::RobotContainer() {
 	ConfigureDashboard();

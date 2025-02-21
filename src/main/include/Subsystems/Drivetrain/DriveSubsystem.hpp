@@ -36,6 +36,7 @@ public:
 		frc::Translation2d{Drivetrain::Module::Rear::Left::Location},
 		frc::Translation2d{Drivetrain::Module::Rear::Right::Location}
 	};
+	
 
 private:
 
@@ -53,5 +54,7 @@ private:
 
 	frc::SwerveDriveOdometry<4> m_odometry;
 };
+
+
 
 #endif // _SUBSYSTEM_DRIVE_H

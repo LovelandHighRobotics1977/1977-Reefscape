@@ -36,10 +36,12 @@ frc2::StartEndCommand MechFunctions::coralRevReverse(){
 
 frc2::SequentialCommandGroup MechFunctions::winchUp(){
 	return frc2::SequentialCommandGroup(
-		frc2::ParallelRaceGroup(
-			frc2::RunCommand([this] { m_winch.winchArmMove(-0.4); }),
-			frc2::WaitCommand(0.1_s)
-		),
+		
+			frc2::ParallelRaceGroup(
+				frc2::RunCommand([this] { m_winch.winchArmMove(-0.4); }),
+				frc2::WaitCommand(0.1_s)
+			),
+		
 		frc2::InstantCommand([this] { m_winch.winchArmMove(0); })
 	);
 }
