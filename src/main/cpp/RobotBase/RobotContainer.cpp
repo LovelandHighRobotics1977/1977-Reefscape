@@ -4,6 +4,7 @@
 
 #include "RobotBase/RobotContainer.hpp"
 #include "headers/Headers.hpp"
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 RobotContainer::RobotContainer() {
 	ConfigureDashboard();
@@ -25,11 +26,30 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
 	));
+	/*
+	m_mechanism.SetDefaultCommand(frc2::RunCommand( 
+		[this] { m_mechanism.alignArm(false); },
+		{&m_mechanism}
+	));
+	*/
 }
 
 void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
+
+	frc2::Trigger elevatorUp([this] { return m_operator.elevatorUp; });
+	elevatorUp.WhileTrue(m_mechanism.coralElevatorUp().ToPtr());
+
+	frc2::Trigger elevatorDown([this] { return m_operator.elevatorDown; });
+	elevatorDown.WhileTrue(m_mechanism.coralElevatorDown().ToPtr());
+
+	frc2::Trigger punchUp([this] { return m_operator.punchUp; });
+	punchUp.WhileTrue(m_mechanism.algaePunchUp().ToPtr());
+
+	frc2::Trigger punchDown([this] { return m_operator.punchDown; });
+	punchDown.OnTrue(m_mechanism.algaePunchDown().ToPtr());
+
 
 }
 
@@ -41,8 +61,8 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_position.AddOption("Team Center", 2);
 	c_position.AddOption("Outside of Field", 3);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_position).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
-	//
+	frc::SmartDashboard::PutData("Auto Position", &c_position);
+	//create c_position dropdown menu
 
 	//Position set option
 	c_target.AddOption("10/21", 1); //The front
@@ -52,15 +72,14 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_target.AddOption("6/17", 5);
 	c_target.AddOption("11/22", 6);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_target).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
+	frc::SmartDashboard::PutData("Auto Target", &c_target);
 
 	//Alliancee override option
 	c_allianceOverride.SetDefaultOption("Base Option",0);
 	c_allianceOverride.AddOption("Red",1);
 	c_allianceOverride.AddOption("Blue",2);
 
-	frc::Shuffleboard::GetTab("Autonomous").Add(c_allianceOverride).WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
-	
+	frc::SmartDashboard::PutData("Alliance Override", &c_allianceOverride);
 }
 
 void RobotContainer::setAutoValues() {

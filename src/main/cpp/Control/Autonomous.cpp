@@ -1,6 +1,6 @@
 #include "Control/Autonomous.hpp"
 //In the future, pose estimation will be used to determine the location and accuracy for auto
-
+//must go forward 224 in. and 136 in left
 
 /* example auto routine
 
@@ -56,34 +56,29 @@ void AutoFctns::setAutoRoutineValues(int position, int targetR, int targetB, std
 frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive) {
 	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
 	return frc2::SequentialCommandGroup(
-
+		
 		//This will reset the gyro
         drive->ZeroOdometry({0_m, 0_m, 0_deg}),
 		frc2::SequentialCommandGroup(
-				//6.01 meters need to be traversed
-				//This will have the bot immediately stop:
 				frc2::InstantCommand([drive] { drive->Drive({});}),
-//once done building, drive forward 2 ft, then do this.
-				/*
 				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({2_fps, 0_fps, 0_deg_per_s, 0});}, {drive}),
-					frc2::WaitCommand(1_s)
-				),
-				*/
-				frc2::ParallelRaceGroup(
-					//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSet, AutoInfo::colorSet),
 
-					//In this case, the function is to drive, which is determined by (forwards/backwards, left/right, rotation, and orientation base):
-                    frc2::RunCommand([drive] { drive->Drive({-1_fps, -5.5_fps, -20_deg_per_s, 0});}, {drive}), //podiyibr is right
+                    frc2::RunCommand([drive] { drive->Drive({-4.5_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
 
-					//This line will have the robot wait for the amount of time specified.  Normally, 1 second is enough:
                     frc2::WaitCommand(4_s)
                 ),
 				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 5.5_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::WaitCommand(2_s)
+                ),
+				//add in a while function that will position the robot
 
+				//move the robot forwards by the final amount.
+				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({1_fps, 0_fps, 0_deg_per_s, 0});}, {drive}),
                     frc2::WaitCommand(1_s)
                 )
+
 		)
 	).ToPtr();
 }

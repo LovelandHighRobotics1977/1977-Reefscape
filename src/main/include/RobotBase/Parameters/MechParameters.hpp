@@ -2,9 +2,14 @@
 #define _MECH_PARAMETERS_H
 
 #include "RobotBase/specifications/RobotSpecifications.hpp"
-
 namespace Mechanism {
-	static constexpr int Intake = 14;
+	namespace Algae{
+		static constexpr int Puncher = 14;
+	}
+	namespace Coral{
+		static constexpr int Arm = 15;
+		static constexpr int Elevator = 16;
+	}
 	
 }
 
