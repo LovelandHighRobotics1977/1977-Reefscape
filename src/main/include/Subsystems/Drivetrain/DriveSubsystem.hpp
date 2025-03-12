@@ -25,6 +25,7 @@ public:
 	 */
 	void Drive(DriveData data);
 	void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+	void driveFromTagDuringAuto();
 	frc2::SequentialCommandGroup ZeroOdometry(frc::Pose2d pose);
 
 	frc::Rotation2d GetHeading();

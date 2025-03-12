@@ -1,5 +1,4 @@
-#ifndef _LIBRARIES_H
-#define _LIBRARIES_H
+#pragma once
 
 // Be wary all who enter, for beyond lies the wall of include statements
 
@@ -123,4 +122,3 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/NTSendable.h>
 
-#endif  // _LIBRARIES_H

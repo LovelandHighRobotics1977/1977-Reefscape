@@ -36,7 +36,7 @@ class RobotContainer {
 	// Cameras
 		
 	//Auto routine
-		frc2::CommandPtr a_main = AutoFctns::autonomousRoutine(&m_drive);
+		frc2::CommandPtr a_main = AutoFctns::autonomousRoutine(&m_drive, &m_mechanism);
 		frc::SendableChooser<int> c_position;
 		frc::SendableChooser<int> c_target;
 		frc::SendableChooser<int> c_allianceOverride;

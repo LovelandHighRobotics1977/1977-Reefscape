@@ -26,12 +26,6 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
 	));
-	/*
-	m_mechanism.SetDefaultCommand(frc2::RunCommand( 
-		[this] { m_mechanism.alignArm(false); },
-		{&m_mechanism}
-	));
-	*/
 }
 
 void RobotContainer::ConfigureButtonBindings() {

@@ -7,7 +7,7 @@ namespace Mechanism {
 		static constexpr int Intake = 14;
 		namespace Angle{
 			static constexpr int Winch = 15;
-			static constexpr int Limit1 = 1;
+			static constexpr int LimitUp = 1;
 		}
 		namespace Puncher{
 			static constexpr int Puncher = 17;

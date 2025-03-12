@@ -1,5 +1,4 @@
-#ifndef _HEADERS_H
-#define _HEADERS_H
+#pragma once
 
 // Project Info, contains credits, license, and other important stuffs
 // I don't care Dean. This is staying and you can cry about it.  
@@ -24,4 +23,3 @@
 // Robot parameters, NOT robot specific
 #include "RobotBase/Parameters/RobotParameters.hpp"
 
-#endif  // _HEADERS_H

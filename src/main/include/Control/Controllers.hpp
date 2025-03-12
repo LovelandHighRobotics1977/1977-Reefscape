@@ -44,7 +44,6 @@ class Driver : public frc2::SubsystemBase {
 
 			// Control Scheme Definitions
 			if(m_Joystick.GetName() == std::string{"X52 H.O.T.A.S."}){
-				//field_relative = !m_Joystick.GetRawButton(6); // 6 is not working
 				field_relative = !m_Joystick.GetRawButton(1);
 
 				gyro_reset = m_Joystick.GetRawButton(2);
@@ -62,7 +61,9 @@ class Driver : public frc2::SubsystemBase {
 				}
 
 
-				targetNearestAprilTag = m_Joystick.GetRawButton(4);
+				//targetNearestAprilTag = m_Joystick.GetRawButton(4);
+				rightCoral = m_Joystick.GetRawButton(3);
+				leftCoral = m_Joystick.GetRawButton(4);
 			}
 
 			if(m_Joystick.GetName() == std::string{"Extreme 3D pro"}){
@@ -80,15 +81,13 @@ class Driver : public frc2::SubsystemBase {
 				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetTwist();
 
-				rightCoral = m_Joystick.GetRawButton(6);
-				leftCoral = m_Joystick.GetRawButton(4);
-
-				leftRelease = m_Joystick.GetRawButtonReleased(4);
-				rightRelease = m_Joystick.GetRawButtonReleased(6);
+				rightCoral = m_Joystick.GetRawButton(4);
+				leftCoral = m_Joystick.GetRawButton(6);
 			}
 
 
 			
+
 			if(leftCoral || rightCoral){
 				//set robot speed values appropriate to the nearest april tag
 				AimFunctions::determineValues(leftCoral);
@@ -111,6 +110,7 @@ class Driver : public frc2::SubsystemBase {
 					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
 				}
 			}
+
 		}
 
 		private:
@@ -120,8 +120,8 @@ class Driver : public frc2::SubsystemBase {
 			frc::SlewRateLimiter<units::dimensionless::scalar> m_strafeLimiter{3 / 1_ms};
 			frc::SlewRateLimiter<units::dimensionless::scalar> m_rotateLimiter{3 / 1_ms};
 
-			double forward_deadzone = 0.1;
-			double strafe_deadzone  = 0.25;
+			double forward_deadzone = 0.15;
+			double strafe_deadzone  = 0.3;
 			double rotate_deadzone  = 0.1;
 	};
 

@@ -4,8 +4,10 @@
 #include "headers/Headers.hpp"
 
 #include "subsystems/Drivetrain/DriveSubsystem.hpp"
-
 #include "subsystems/Drivetrain/Commands.hpp"
+
+#include "subsystems/Mechanism/MechFunctions.hpp"
+
 
 /*
 Run : Shoot once and skedaddle ( In center : goes under the stage )
@@ -27,7 +29,7 @@ namespace AutoInfo{
 namespace AutoFctns{
     void setAutoRoutineValues(int position, int targetR, int targetB, std::optional<frc::DriverStation::Alliance> color);
 
-    frc2::CommandPtr autonomousRoutine(DriveSubsystem *drive);
+    frc2::CommandPtr autonomousRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions);
 }
 
 

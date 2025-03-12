@@ -1,5 +1,4 @@
-#ifndef _AUTO_AIM_H
-#define _AUTO_AIM_H
+#pragma once
 
 namespace AimFunctions{
     void determineValues(bool left);
@@ -7,6 +6,3 @@ namespace AimFunctions{
     double getSideSpeed();
     double getRotationSpeed();
 }
-
-
-#endif
