@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 #include "Subsystems/Drivetrain/DriveSubsystem.hpp"
 #include "Headers/Headers.hpp"
 
@@ -120,3 +120,20 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 
 	m_odometry.ResetPosition(data.angle, data.positions, pose);
 }
+
+void DriveSubsystem::driveFromTagDuringAuto(){
+	AimFunctions::determineValues();
+	DriveSubsystem::Drive({
+		AimFunctions::getForwardSpeed() *  1_fps,
+		AimFunctions::getSideSpeed() * 1_fps,
+		AimFunctions::getRotationSpeed() * 1_rad_per_s,
+		1
+	});	
+}
+// change these into commands that will be ran on button press
+
+
+
+
+
+

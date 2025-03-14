@@ -35,3 +35,33 @@ frc2::InstantCommand SwerveCommand::ResetOdometry(DriveSubsystem *drive, frc::Po
 	return frc2::InstantCommand([drive, pose] { drive->ZeroOdometry(pose); });
 }
 
+AutoAlignLeft::AutoAlignLeft(DriveSubsystem *drive) {
+	frc2::SequentialCommandGroup{
+		frc2::InstantCommand([drive] { drive->Drive({});}),
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+			frc2::WaitCommand(2_s)
+		),
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([drive] { drive->Drive({0_fps, 2_fps, 0_deg_per_s, 0});}, {drive}),
+			frc2::WaitCommand(1_s)
+		)
+
+	};
+}
+
+AutoAlignRight::AutoAlignRight(DriveSubsystem *drive) {
+	frc2::SequentialCommandGroup{
+		frc2::InstantCommand([drive] { drive->Drive({});}),
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+			frc2::WaitCommand(2_s)
+		),
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([drive] { drive->Drive({0_fps, -2_fps, 0_deg_per_s, 0});}, {drive}),
+			frc2::WaitCommand(1_s)
+		)
+
+	};
+}
+

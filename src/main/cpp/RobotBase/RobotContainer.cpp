@@ -4,6 +4,7 @@
 
 #include "RobotBase/RobotContainer.hpp"
 #include "headers/Headers.hpp"
+#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 RobotContainer::RobotContainer() {
 	ConfigureDashboard();
@@ -25,17 +26,13 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
 	));
-	/*
-	m_mechanism.SetDefaultCommand(frc2::RunCommand( 
-		[this] { m_mechanism.alignArm(false); },
-		{&m_mechanism}
-	));
-	*/
 }
 
 void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
+
+	//Find a way to place the AutoAlignLeft and AutoAlignRight commands in here
 
 	frc2::Trigger shootCoral([this] { return m_operator.shootCoral; });
 	shootCoral.WhileTrue(m_mechanism.coralRev().ToPtr());
@@ -139,6 +136,10 @@ void RobotContainer::setAutoValues() {
 void RobotContainer::ConfigureDashboard() {
 
 	cs::UsbCamera DriveCamera = frc::CameraServer::StartAutomaticCapture(0);
+	DriveCamera.SetResolution(480, 320);
+	cs::UsbCamera DriveCamera2 = frc::CameraServer::StartAutomaticCapture(1);
+	DriveCamera2.SetResolution(480, 320);
+
 
 }
 

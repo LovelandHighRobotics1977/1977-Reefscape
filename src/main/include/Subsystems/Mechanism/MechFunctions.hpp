@@ -1,5 +1,4 @@
-#ifndef _MECH_FUNCTIONS_H
-#define _MECH_fUNCTIONS_H
+#pragma once
 
 #include "subsystems/Mechanism/Algae.hpp"
 #include "subsystems/Mechanism/Coral.hpp"
@@ -32,4 +31,3 @@ class MechFunctions : public frc2::SubsystemBase {
 
 };
 
-#endif

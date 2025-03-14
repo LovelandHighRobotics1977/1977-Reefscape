@@ -1,12 +1,10 @@
-#ifndef _AUTO_AIM_H
-#define _AUTO_AIM_H
+#pragma once
+
+#include "Headers/Headers.hpp"
 
 namespace AimFunctions{
-    void determineValues();
-    double getForwardSpeed();
-    double getSideSpeed();
-    double getRotationSpeed();
-}
-
-
-#endif
+        void determineValues();
+        double getForwardSpeed();
+        double getSideSpeed();
+        double getRotationSpeed();
+};

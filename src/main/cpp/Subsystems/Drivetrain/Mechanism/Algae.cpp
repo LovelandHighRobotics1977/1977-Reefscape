@@ -14,7 +14,7 @@ AlgaeWinch::AlgaeWinch() : m_winch{Mechanism::Algae::Angle::Winch}{
 }
 
 AlgaePuncher::AlgaePuncher() : m_puncher{Mechanism::Algae::Puncher::Puncher}{
-    puncherMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+    puncherMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     puncherMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     puncherMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
     m_puncher.GetConfigurator().Apply(puncherMotorConfig);

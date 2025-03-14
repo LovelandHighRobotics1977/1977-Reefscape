@@ -42,14 +42,14 @@ SwerveModule::SwerveModule(const int driveMotorID,     const int angleMotorID,  
 
 frc::SwerveModuleState SwerveModule::GetState() {
 	return {
-		-(m_driveMotor.GetVelocity().GetValue().value() * Drivetrain::Module::Motor::Drive::distance_per_rotation)/1_s,
+		(m_driveMotor.GetVelocity().GetValue().value() * Drivetrain::Module::Motor::Drive::distance_per_rotation)/1_s,
 		units::degree_t{m_angleEncoder.GetAbsolutePosition().GetValue()}
 	};
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() {
 	return {
-		-m_driveMotor.GetPosition().GetValue().value() * Drivetrain::Module::Motor::Drive::distance_per_rotation,
+		m_driveMotor.GetPosition().GetValue().value() * Drivetrain::Module::Motor::Drive::distance_per_rotation,
 		units::degree_t{m_angleEncoder.GetAbsolutePosition().GetValue()}
 	};
 }

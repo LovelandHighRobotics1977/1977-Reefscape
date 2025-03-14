@@ -1,5 +1,4 @@
-#ifndef _SUBSYSTEM_DRIVE_H
-#define _SUBSYSTEM_DRIVE_H
+#pragma once
 
 #include "headers/Headers.hpp"
 #include "subsystems/Drivetrain/SwerveModule.hpp"
@@ -25,6 +24,7 @@ public:
 	 */
 	void Drive(DriveData data);
 	void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+	void driveFromTagDuringAuto();
 	frc2::SequentialCommandGroup ZeroOdometry(frc::Pose2d pose);
 
 	frc::Rotation2d GetHeading();
@@ -57,4 +57,3 @@ private:
 
 
 
-#endif // _SUBSYSTEM_DRIVE_H
