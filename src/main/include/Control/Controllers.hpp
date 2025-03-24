@@ -4,7 +4,6 @@
 #include "Headers/Libraries.hpp"
 
 #include "RobotBase/Specifications/RobotSpecifications.hpp"
-#include "Subsystems/Drivetrain/AutoAim.hpp"
 
 class Driver : public frc2::SubsystemBase {
 	public:
@@ -31,8 +30,7 @@ class Driver : public frc2::SubsystemBase {
 		bool leftCoral;
 		bool rightCoral;
 
-		bool leftRelease;
-		bool rightRelease;
+
 
 
 		/**
@@ -64,40 +62,30 @@ class Driver : public frc2::SubsystemBase {
 				//targetNearestAprilTag = m_Joystick.GetRawButton(4);
 				rightCoral = m_Joystick.GetRawButton(3);
 				leftCoral = m_Joystick.GetRawButton(4);
+
+
 			}
 
 			if(m_Joystick.GetName() == std::string{"Extreme 3D pro"}){
-				field_relative = !m_Joystick.GetRawButton(2);
+				//field_relative = !m_Joystick.GetRawButton(2);
 
 				gyro_reset = m_Joystick.GetRawButton(3);
 
 				trigger_one = m_Joystick.GetRawButton(1);
 
-				coast_mode_toggle = m_Joystick.GetRawButton(5);
-
+				//coast_mode_toggle = m_Joystick.GetRawButton(5);
 				throttle = (-m_Joystick.GetThrottle() + 1) / 2;
 
 				forward = m_Joystick.GetY();
 				strafe = m_Joystick.GetX();
 				rotate = m_Joystick.GetTwist();
 
-				rightCoral = m_Joystick.GetRawButton(4);
-				leftCoral = m_Joystick.GetRawButton(6);
+				rightCoral = m_Joystick.GetRawButton(6);
+				leftCoral = m_Joystick.GetRawButton(5);
+
 			}
 
 
-			
-
-			if(leftCoral || rightCoral){
-				//set robot speed values appropriate to the nearest april tag
-				AimFunctions::determineValues(leftCoral);
-
-
-				forward = AimFunctions::getForwardSpeed();
-				strafe = AimFunctions::getSideSpeed();
-				rotate = AimFunctions::getRotationSpeed();
-
-			}else{
 				// Controller values and optimizations
 				forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
 				strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
@@ -109,8 +97,6 @@ class Driver : public frc2::SubsystemBase {
 				}else{
 					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
 				}
-			}
-
 		}
 
 		private:

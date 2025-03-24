@@ -56,7 +56,7 @@ void AutoFctns::setAutoRoutineValues(int position, int targetR, int targetB, std
 }
 
 
-frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) {
+frc2::CommandPtr AutoFctns::backRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) {
 	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
 	return frc2::SequentialCommandGroup(
 		
@@ -66,22 +66,142 @@ frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctio
 				frc2::InstantCommand([drive] { drive->Drive({});}),
 				frc2::ParallelRaceGroup(
 
-                    frc2::RunCommand([drive] { drive->Drive({-4.5_fps, 0.7_fps, 0_deg_per_s, 0});}, {drive}), 
+                    frc2::RunCommand([drive] { drive->Drive({-3.8_fps, 0.5_fps, 0_deg_per_s, 0});}, {drive}), 
                     frc2::WaitCommand(5_s)
                 ),
 				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({0_fps, 4.6_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 4.3_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::WaitCommand(2_s)
+                ),
+				frc2::ParallelRaceGroup(
+					frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+					frc2::WaitCommand(2_s)
+				),
+				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0.9_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::WaitCommand(1_s)
+                ),
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+					mechFunctions->coralRev(),
+					frc2::WaitCommand(1_s)
+				)
+		)
+
+	).ToPtr();
+}
+
+frc2::CommandPtr AutoFctns::backRoutineSameSide(DriveSubsystem *drive, MechFunctions *mechFunctions) {
+	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
+	return frc2::SequentialCommandGroup(
+		
+		//This will reset the gyro
+        drive->ZeroOdometry({0_m, 0_m, 0_deg}),
+		frc2::SequentialCommandGroup(
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({-3.8_fps, -0.5_fps, 0_deg_per_s, 0});}, {drive}), 
+                    frc2::WaitCommand(5_s)
+                ),
+				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, -4.3_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::WaitCommand(2_s)
+                ),
+				frc2::ParallelRaceGroup(
+					frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+					frc2::WaitCommand(2_s)
+				),
+				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0.9_fps, 0_deg_per_s, 0});}, {drive}),
+                    frc2::WaitCommand(1_s)
+                ),
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+					mechFunctions->coralRev(),
+					frc2::WaitCommand(1_s)
+				)
+		)
+
+	).ToPtr();
+}
+
+frc2::CommandPtr AutoFctns::sameSideRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) { //opposite side
+	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
+	return frc2::SequentialCommandGroup(
+		
+		//This will reset the gyro
+        drive->ZeroOdometry({0_m, 0_m, 0_deg}),
+		frc2::SequentialCommandGroup(
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, -3_fps, 0_deg_per_s, 0});}, {drive}), 
                     frc2::WaitCommand(2_s)
                 ),
 				frc2::ParallelRaceGroup(
 					frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
 					frc2::WaitCommand(4_s)
 				),
+				frc2::ParallelRaceGroup(
+					frc2::RunCommand([drive] { drive->Drive({0_fps, -0.90_fps, 0_deg_per_s, 0});}, {drive}),
+					frc2::WaitCommand(1_s)
+				),
 				frc2::InstantCommand([drive] { drive->Drive({});}),
 				frc2::ParallelRaceGroup(
 					mechFunctions->coralRev(),
 					frc2::WaitCommand(1_s)
 				)
+		)
+
+	).ToPtr();
+}
+
+frc2::CommandPtr AutoFctns::oppositeSideRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) {
+	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
+	return frc2::SequentialCommandGroup(
+		
+		//This will reset the gyro
+        drive->ZeroOdometry({0_m, 0_m, 0_deg}),
+		frc2::SequentialCommandGroup(
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 2.5_fps, 0_deg_per_s, 0});}, {drive}), 
+                    frc2::WaitCommand(2_s)
+                ),
+				frc2::ParallelRaceGroup(
+					frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+					frc2::WaitCommand(4_s)
+				),
+				frc2::ParallelRaceGroup(
+					frc2::RunCommand([drive] { drive->Drive({0_fps, -0.9_fps, 0_deg_per_s, 0});}, {drive}),
+					frc2::WaitCommand(1_s)
+				),
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+					mechFunctions->coralRev(),
+					frc2::WaitCommand(1_s)
+				)
+		)
+
+	).ToPtr();
+}
+
+frc2::CommandPtr AutoFctns::justDrive(DriveSubsystem *drive) {
+	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
+	return frc2::SequentialCommandGroup(
+		
+		//This will reset the gyro
+        drive->ZeroOdometry({0_m, 0_m, 0_deg}),
+		frc2::SequentialCommandGroup(
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({3_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
+                    frc2::WaitCommand(1_s)
+                ),
+				frc2::InstantCommand([drive] { drive->Drive({});})
 		)
 
 	).ToPtr();

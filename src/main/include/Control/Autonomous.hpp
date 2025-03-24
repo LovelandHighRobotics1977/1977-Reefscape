@@ -29,7 +29,11 @@ namespace AutoInfo{
 namespace AutoFctns{
     void setAutoRoutineValues(int position, int targetR, int targetB, std::optional<frc::DriverStation::Alliance> color);
 
-    frc2::CommandPtr autonomousRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions);
+    frc2::CommandPtr backRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions);
+    frc2::CommandPtr backRoutineSameSide(DriveSubsystem *drive, MechFunctions *mechFunctions);
+    frc2::CommandPtr sameSideRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions);
+    frc2::CommandPtr oppositeSideRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions);
+    frc2::CommandPtr justDrive(DriveSubsystem *drive);
 }
 
 

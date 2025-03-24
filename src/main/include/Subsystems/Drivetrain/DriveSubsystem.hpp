@@ -1,5 +1,4 @@
-#ifndef _SUBSYSTEM_DRIVE_H
-#define _SUBSYSTEM_DRIVE_H
+#pragma once
 
 #include "headers/Headers.hpp"
 #include "subsystems/Drivetrain/SwerveModule.hpp"
@@ -37,6 +36,9 @@ public:
 		frc::Translation2d{Drivetrain::Module::Rear::Left::Location},
 		frc::Translation2d{Drivetrain::Module::Rear::Right::Location}
 	};
+
+	frc2::SequentialCommandGroup AutoAlignLeft(DriveSubsystem *drive);
+	frc2::SequentialCommandGroup AutoAlignRight(DriveSubsystem *drive);
 	
 
 private:
@@ -58,4 +60,3 @@ private:
 
 
 
-#endif // _SUBSYSTEM_DRIVE_H

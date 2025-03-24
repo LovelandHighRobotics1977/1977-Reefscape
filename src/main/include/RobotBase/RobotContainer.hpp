@@ -28,6 +28,8 @@ class RobotContainer {
 		DriveSubsystem m_drive;
 		MechFunctions m_mechanism;
 
+		
+
 
 	// Network Tables
 
@@ -36,10 +38,12 @@ class RobotContainer {
 	// Cameras
 		
 	//Auto routine
-		frc2::CommandPtr a_main = AutoFctns::autonomousRoutine(&m_drive, &m_mechanism);
-		frc::SendableChooser<int> c_position;
-		frc::SendableChooser<int> c_target;
-		frc::SendableChooser<int> c_allianceOverride;
+		frc2::CommandPtr a_main = AutoFctns::backRoutine(&m_drive, &m_mechanism);
+		frc2::CommandPtr a_mainSameSide = AutoFctns::backRoutineSameSide(&m_drive, &m_mechanism);
+		frc2::CommandPtr a_red = AutoFctns::oppositeSideRoutine(&m_drive, &m_mechanism);
+		frc2::CommandPtr a_blue = AutoFctns::sameSideRoutine(&m_drive, &m_mechanism);
+		frc2::CommandPtr a_drive = AutoFctns::justDrive(&m_drive);
+		frc::SendableChooser<int> c_autoChosen;
 };
 
 #endif  // _ROBOT_CONTAINER_H

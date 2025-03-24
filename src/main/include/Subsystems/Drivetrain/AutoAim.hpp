@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Headers/Headers.hpp"
+
 namespace AimFunctions{
-    void determineValues(bool left);
-    double getForwardSpeed();
-    double getSideSpeed();
-    double getRotationSpeed();
-}
+        void determineValues();
+        double getForwardSpeed();
+        double getSideSpeed();
+        double getRotationSpeed();
+};

@@ -21,7 +21,7 @@ void RobotContainer::ConfigureDefaultCommands() {
 			m_driver.forward * Drivetrain::Movement::Maximum::Linear::Velocity, 
 			m_driver.strafe * Drivetrain::Movement::Maximum::Linear::Velocity, 
 			m_driver.rotate * Drivetrain::Movement::Maximum::Angular::Velocity, 
-			m_driver.field_relative,
+			1,
 			Drivetrain::Movement::Rotate::Around::Center,
 			m_driver.coast_mode_toggle });}, 
 		{&m_drive}
@@ -31,7 +31,13 @@ void RobotContainer::ConfigureDefaultCommands() {
 void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
+	
+	frc2::Trigger leftCoral([this] { return m_driver.leftCoral; });
+	leftCoral.OnTrue(m_drive.AutoAlignLeft(&m_drive).ToPtr());
 
+	frc2::Trigger rightCoral([this] { return m_driver.rightCoral; });
+	rightCoral.OnTrue(m_drive.AutoAlignRight(&m_drive).ToPtr());
+	
 	frc2::Trigger shootCoral([this] { return m_operator.shootCoral; });
 	shootCoral.WhileTrue(m_mechanism.coralRev().ToPtr());
 
@@ -51,10 +57,10 @@ void RobotContainer::ConfigureButtonBindings() {
 	reverseCoral.WhileTrue(m_mechanism.coralRevReverse().ToPtr());
 
 	frc2::Trigger winchUp([this] { return m_operator.winchUp; });
-	winchUp.OnTrue(m_mechanism.winchUp().ToPtr());
+	winchUp.WhileTrue(m_mechanism.winchUp().ToPtr());
 
 	frc2::Trigger winchDown([this] { return m_operator.winchDown; });
-	winchDown.OnTrue(m_mechanism.winchDown().ToPtr());
+	winchDown.WhileTrue(m_mechanism.winchDown().ToPtr());
 
 
 }
@@ -63,80 +69,38 @@ void RobotContainer::ConfigureAutonomousChooser() {
 
 	//Starting position option
 	
-	c_position.AddOption("Field Center", 1);
-	c_position.AddOption("Team Center", 2);
-	c_position.AddOption("Outside of Field", 3);
+	c_autoChosen.AddOption("Back of Field (place in opposite color)", 1);
+	c_autoChosen.AddOption("Just Drive", 2);
+	c_autoChosen.AddOption("Opposite Color", 3);
+	c_autoChosen.AddOption("Same Color", 4);
+	c_autoChosen.AddOption("Same Color Back", 5);
 
-	frc::SmartDashboard::PutData("Auto Position", &c_position);
+	frc::SmartDashboard::PutData("Auto Position", &c_autoChosen);
 	//create c_position dropdown menu
 
 	//Position set option
-	c_target.AddOption("10/21", 1); //The front
-	c_target.AddOption("9/20", 2); 
-	c_target.AddOption("8/19", 3);
-	c_target.AddOption("7/18", 4); //The back
-	c_target.AddOption("6/17", 5);
-	c_target.AddOption("11/22", 6);
-
-	frc::SmartDashboard::PutData("Auto Target", &c_target);
-
 	//Alliancee override option
-	c_allianceOverride.SetDefaultOption("Base Option",0);
-	c_allianceOverride.AddOption("Red",1);
-	c_allianceOverride.AddOption("Blue",2);
 
-	frc::SmartDashboard::PutData("Alliance Override", &c_allianceOverride);
 }
 
-void RobotContainer::setAutoValues() {
-	//Set team color, which will provide positive/negative multiplier:
-	if(c_allianceOverride.GetSelected() == 0){
-		if(auto check = frc::DriverStation::GetAlliance()){
-			AutoInfo::colorSet = frc::DriverStation::GetAlliance();
-		}
-		else{
-			AutoInfo::colorSet = frc::DriverStation::Alliance::kRed; //default to red on issue
-		}
-	}else{
-		switch(c_allianceOverride.GetSelected()){
-			case 1: AutoInfo::colorSet = frc::DriverStation::Alliance::kRed;
-				[[fallthrough]];
-			case 2: AutoInfo::colorSet = frc::DriverStation::Alliance::kBlue;
-			
-		}
-	}
-	//Set the starting position, which affects arching angle
-	switch(c_position.GetSelected()){
-		case 1: AutoInfo::positionSet = 1;//true center value
-		case 2: AutoInfo::positionSet = 2;//team center value
-		case 3: AutoInfo::positionSet = 3;//edge value
-		default: AutoInfo::positionSet = 3;
-	}
-	//Set the Apriltag Target and provide speed and rotation modifiers
-	switch(c_target.GetSelected()){
-		case 1: AutoInfo::targetSetR = 10; //set red target
-				AutoInfo::targetSetB = 21; //set blue target
-		case 2: AutoInfo::targetSetR = 9;
-				AutoInfo::targetSetB = 20;
-		case 3: AutoInfo::targetSetR = 8;
-				AutoInfo::targetSetB = 19;
-		case 4: AutoInfo::targetSetR = 7;
-				AutoInfo::targetSetB = 18;
-		case 5: AutoInfo::targetSetR = 6;
-				AutoInfo::targetSetB = 17;
-		case 6: AutoInfo::targetSetR = 11;
-				AutoInfo::targetSetB = 22;
-		default: AutoInfo::targetSetR = 10;
-				AutoInfo::targetSetB = 21;
-	}
-}
+
 
 void RobotContainer::ConfigureDashboard() {
 
 	cs::UsbCamera DriveCamera = frc::CameraServer::StartAutomaticCapture(0);
+	DriveCamera.SetResolution(480, 320);
+	cs::UsbCamera DriveCamera2 = frc::CameraServer::StartAutomaticCapture(1);
+	DriveCamera2.SetResolution(480, 320);
+
 
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-	return RobotContainer::a_main.get();
+	switch(c_autoChosen.GetSelected()){
+		case 1: return RobotContainer::a_main.get();
+		case 2: return RobotContainer::a_drive.get();
+		case 3: return RobotContainer::a_red.get();
+		case 4: return RobotContainer::a_blue.get();
+		case 5: return RobotContainer::a_mainSameSide.get();
+	}
 }

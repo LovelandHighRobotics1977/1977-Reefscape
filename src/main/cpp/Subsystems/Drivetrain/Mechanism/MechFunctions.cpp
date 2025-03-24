@@ -34,33 +34,27 @@ frc2::StartEndCommand MechFunctions::coralRevReverse(){
 	);
 }
 
-frc2::SequentialCommandGroup MechFunctions::winchUp(){
-	return frc2::SequentialCommandGroup(
-		
-			frc2::ParallelRaceGroup(
-				frc2::RunCommand([this] { m_winch.winchArmMove(-0.2); }),
-				frc2::WaitCommand(0.1_s)
-			),
-		
-		frc2::InstantCommand([this] { m_winch.winchArmMove(0); })
+frc2::StartEndCommand MechFunctions::winchUp(){
+	return frc2::StartEndCommand(
+		[this] { m_winch.winchArmMove(.54); } , 
+		[this] { m_winch.winchArmMove(0); } , 
+		{&m_winch}
 	);
 }
 
-frc2::SequentialCommandGroup MechFunctions::winchDown(){
-	return frc2::SequentialCommandGroup(
-		frc2::ParallelRaceGroup(
-			frc2::RunCommand([this] { m_winch.winchArmMove(0.2); }),
-			frc2::WaitCommand(0.1_s)
-		),
-		frc2::InstantCommand([this] { m_winch.winchArmMove(0); })
+frc2::StartEndCommand MechFunctions::winchDown(){
+	return frc2::StartEndCommand(
+		[this] { m_winch.winchArmMove(-.54); } , 
+		[this] { m_winch.winchArmMove(0); } , 
+		{&m_winch}
 	);
 }
 
 frc2::SequentialCommandGroup MechFunctions::algaePunch(){
 	return frc2::SequentialCommandGroup(
 		frc2::ParallelRaceGroup(
-			frc2::RunCommand([this] { m_puncher.algaePuncherPunch(.75); }),
-			frc2::WaitCommand(0.1_s)
+			frc2::RunCommand([this] { m_puncher.algaePuncherPunch(.3); }),
+			frc2::WaitCommand(0.3_s)
 		),
 		frc2::InstantCommand([this] { m_puncher.algaePuncherPunch(0); })
 	);
@@ -69,8 +63,8 @@ frc2::SequentialCommandGroup MechFunctions::algaePunch(){
 frc2::SequentialCommandGroup MechFunctions::algaePunchDrop(){
 	return frc2::SequentialCommandGroup(
 		frc2::ParallelRaceGroup(
-			frc2::RunCommand([this] { m_puncher.algaePuncherPunch(-0.75); }),
-			frc2::WaitCommand(0.1_s)
+			frc2::RunCommand([this] { m_puncher.algaePuncherPunch(-0.3); }),
+			frc2::WaitCommand(0.3_s)
 		),
 		frc2::InstantCommand([this] { m_puncher.algaePuncherPunch(0); })
 	);
