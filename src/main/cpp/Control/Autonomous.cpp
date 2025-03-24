@@ -53,7 +53,7 @@ void AutoFctns::setAutoRoutineValues(int position, int targetR, int targetB, std
 }
 
 
-frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive) {
+frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) {
 	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
 	return frc2::SequentialCommandGroup(
 		
@@ -61,23 +61,19 @@ frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive) {
         drive->ZeroOdometry({0_m, 0_m, 0_deg}),
 		frc2::SequentialCommandGroup(
 				frc2::InstantCommand([drive] { drive->Drive({});}),
+				
 				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
+					mechFunctions->coralElevatorUp(),
 
-                    frc2::RunCommand([drive] { drive->Drive({-4.5_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
-
-                    frc2::WaitCommand(4_s)
-                ),
-				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({0_fps, 5.5_fps, 0_deg_per_s, 0});}, {drive}),
                     frc2::WaitCommand(2_s)
                 ),
-				//add in a while function that will position the robot
-
-				//move the robot forwards by the final amount.
 				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({1_fps, 0_fps, 0_deg_per_s, 0});}, {drive}),
+
+                    frc2::RunCommand([drive] { drive->Drive({6_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
                     frc2::WaitCommand(1_s)
-                )
+                ),
+				frc2::InstantCommand([drive] { drive->Drive({});})
 
 		)
 	).ToPtr();

@@ -1,4 +1,7 @@
 #include "subsystems/Mechanism/Coral.hpp"
+units::angle::turn_t elevatorMin = 0_tr;
+units::angle::turn_t elevatorMax = 100_tr;
+
 
 CoralElevator::CoralElevator(): m_coralElevatorMotor{Mechanism::Coral::Elevator}{
     coralElevatorMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
@@ -14,13 +17,21 @@ CoralArm::CoralArm(): m_coralArmMotor{Mechanism::Coral::Arm}{
     m_coralArmMotor.GetConfigurator().Apply(coralArmMotorConfig);
 }
 
-
-void CoralElevator::setCoralElevator(double speed){
-    m_coralElevatorMotor.Set(speed);
+void CoralArm::setCoralArm(double speed){    
+    m_coralArmMotor.Set(speed);   
 }
 
-void CoralArm::setCoralArm(double speed){
-    m_coralArmMotor.Set(speed);
+
+void CoralElevator::setCoralElevator(double speed){    
+    m_coralElevatorMotor.Set(speed);   
 }
 
+int CoralElevator::canGoUp(){
+    frc::SmartDashboard::PutNumber("Also Arm Position", m_coralElevatorMotor.GetPosition().GetValueAsDouble());
+    if((m_coralElevatorMotor.GetPosition().GetValue()) < elevatorMax) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 

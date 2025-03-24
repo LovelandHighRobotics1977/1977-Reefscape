@@ -8,6 +8,7 @@ class CoralElevator : public frc2::SubsystemBase {
 		CoralElevator();
 
 		void setCoralElevator(double speed);
+		int canGoUp();
 
 	private:
 		ctre::phoenix6::hardware::TalonFX m_coralElevatorMotor;

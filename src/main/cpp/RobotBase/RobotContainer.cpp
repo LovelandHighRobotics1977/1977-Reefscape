@@ -38,6 +38,12 @@ void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
 
+	frc2::Trigger leftCoral([this] { return m_driver.leftCoral; });
+	leftCoral.OnTrue(m_drive.AutoAlignLeft(&m_drive).ToPtr());
+
+	frc2::Trigger rightCoral([this] { return m_driver.rightCoral; });
+	rightCoral.OnTrue(m_drive.AutoAlignRight(&m_drive).ToPtr());
+
 	frc2::Trigger elevatorUp([this] { return m_operator.elevatorUp; });
 	elevatorUp.WhileTrue(m_mechanism.coralElevatorUp().ToPtr());
 
@@ -48,7 +54,13 @@ void RobotContainer::ConfigureButtonBindings() {
 	punchUp.WhileTrue(m_mechanism.algaePunchUp().ToPtr());
 
 	frc2::Trigger punchDown([this] { return m_operator.punchDown; });
-	punchDown.OnTrue(m_mechanism.algaePunchDown().ToPtr());
+	punchDown.WhileTrue(m_mechanism.algaePunchDown().ToPtr());
+
+	frc2::Trigger armDown([this] { return m_operator.armDown; });
+	armDown.WhileTrue(m_mechanism.coralArmPassiveDown().ToPtr());
+
+	frc2::Trigger armUp([this] { return m_operator.armUp; });
+	armUp.WhileTrue(m_mechanism.coralArmPassiveUp().ToPtr());
 
 
 }
@@ -60,6 +72,7 @@ void RobotContainer::ConfigureAutonomousChooser() {
 	c_position.AddOption("Field Center", 1);
 	c_position.AddOption("Team Center", 2);
 	c_position.AddOption("Outside of Field", 3);
+	
 
 	frc::SmartDashboard::PutData("Auto Position", &c_position);
 	//create c_position dropdown menu

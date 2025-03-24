@@ -36,6 +36,10 @@ public:
 		frc::Translation2d{Drivetrain::Module::Rear::Left::Location},
 		frc::Translation2d{Drivetrain::Module::Rear::Right::Location}
 	};
+
+	void driveFromTagDuringAuto();
+	frc2::SequentialCommandGroup AutoAlignLeft(DriveSubsystem *drive);
+	frc2::SequentialCommandGroup AutoAlignRight(DriveSubsystem *drive);
 	
 
 private:

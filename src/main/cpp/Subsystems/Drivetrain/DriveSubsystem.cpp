@@ -88,11 +88,11 @@ frc::Rotation2d DriveSubsystem::GetHeading(){
 			break;
 
 		case frc::DriverStation::kBlue:
-			return units::degree_t{180 - Gyro::GetInstance()->ahrs.GetYaw()};
+			return units::degree_t{Gyro::GetInstance()->ahrs.GetYaw()};
 			break;
 
 		default:
-			return units::degree_t{180 - Gyro::GetInstance()->ahrs.GetYaw()};
+			return units::degree_t{Gyro::GetInstance()->ahrs.GetYaw()};
 			break;
 	}
 }
@@ -120,3 +120,54 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 
 	m_odometry.ResetPosition(data.angle, data.positions, pose);
 }
+
+void DriveSubsystem::driveFromTagDuringAuto(){
+	AimFunctions::determineValues();
+	DriveSubsystem::Drive({
+		AimFunctions::getForwardSpeed() *  1_fps,
+		AimFunctions::getSideSpeed() * 1_fps,
+		AimFunctions::getRotationSpeed() * 1_deg_per_s,
+		0
+	});	
+}
+
+frc2::SequentialCommandGroup DriveSubsystem::AutoAlignLeft(DriveSubsystem *drive) {
+	return(
+		frc2::SequentialCommandGroup{
+			frc2::InstantCommand([drive] { drive->Drive({});}),
+			frc2::ParallelRaceGroup(
+				frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+				frc2::WaitCommand(2_s)
+			),
+			frc2::ParallelRaceGroup(
+				frc2::RunCommand([drive] { drive->Drive({0_fps, 0.9_fps, 0_deg_per_s, 0});}, {drive}),
+				frc2::WaitCommand(1_s)
+			)
+
+		}
+	);
+}
+
+frc2::SequentialCommandGroup DriveSubsystem::AutoAlignRight(DriveSubsystem *drive) {
+	return(
+		frc2::SequentialCommandGroup{
+			frc2::InstantCommand([drive] { drive->Drive({});}),
+			frc2::ParallelRaceGroup(
+				frc2::RunCommand([drive] { drive->driveFromTagDuringAuto();}),
+				frc2::WaitCommand(2_s)
+			),
+			frc2::ParallelRaceGroup(
+				frc2::RunCommand([drive] { drive->Drive({0_fps, -0.8_fps, 0_deg_per_s, 0});}, {drive}),
+				frc2::WaitCommand(1_s)
+			)
+		}
+	);
+}
+// change these into commands that will be ran on button press
+
+
+
+
+
+
+

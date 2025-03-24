@@ -31,9 +31,6 @@ class Driver : public frc2::SubsystemBase {
 		bool leftCoral;
 		bool rightCoral;
 
-		bool leftRelease;
-		bool rightRelease;
-
 
 		/**
 		 * Update the controller variables 
@@ -45,9 +42,12 @@ class Driver : public frc2::SubsystemBase {
 			// Control Scheme Definitions
 			if(m_Joystick.GetName() == std::string{"X52 H.O.T.A.S."}){
 				//field_relative = !m_Joystick.GetRawButton(6); // 6 is not working
-				field_relative = !m_Joystick.GetRawButton(1);
+				field_relative = !m_Joystick.GetRawButton(15);
 
 				gyro_reset = m_Joystick.GetRawButton(2);
+				//4 is left, 3 is right
+				leftCoral = m_Joystick.GetRawButton(4);
+				rightCoral = m_Joystick.GetRawButton(3);
 
 				//trigger_one = m_Joystick.GetRawButton(1);
 				//trigger_two = m_Joystick.GetRawButton(15);
@@ -83,34 +83,23 @@ class Driver : public frc2::SubsystemBase {
 				rightCoral = m_Joystick.GetRawButton(6);
 				leftCoral = m_Joystick.GetRawButton(4);
 
-				leftRelease = m_Joystick.GetRawButtonReleased(4);
-				rightRelease = m_Joystick.GetRawButtonReleased(6);
 			}
 
 
 			
-			if(leftCoral || rightCoral){
-				//set robot speed values appropriate to the nearest april tag
-				AimFunctions::determineValues(leftCoral);
-
-
-				forward = AimFunctions::getForwardSpeed();
-				strafe = AimFunctions::getSideSpeed();
-				rotate = AimFunctions::getRotationSpeed();
-
+			
+			// Controller values and optimizations
+			forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
+			strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
+			
+			if(trigger_one && !trigger_two){
+				rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+			}else if(trigger_one && trigger_two){
+				rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
 			}else{
-				// Controller values and optimizations
-				forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
-				strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
-				
-				if(trigger_one && !trigger_two){
-					rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
-				}else if(trigger_one && trigger_two){
-					rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
-				}else{
-					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
-				}
+				rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
 			}
+			
 		}
 
 		private:
@@ -134,6 +123,8 @@ class Operator : public frc2::SubsystemBase {
 		bool elevatorDown;
 		bool punchUp;
 		bool punchDown;
+		bool armUp;
+		bool armDown;
 
 
 		void update(){
@@ -143,6 +134,11 @@ class Operator : public frc2::SubsystemBase {
 
 			elevatorUp = m_XboxController.GetLeftBumperButton();
 			elevatorDown = m_XboxController.GetRightBumperButton();
+
+			armUp = m_XboxController.GetBButton();
+			armDown = m_XboxController.GetAButton();
+
+
 
 		}
 
