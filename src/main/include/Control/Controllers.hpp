@@ -1,0 +1,150 @@
+#pragma once
+
+#include "Headers/Libraries.hpp"
+
+#include "RobotBase/Specifications/RobotSpecifications.hpp"
+
+class Driver : public frc2::SubsystemBase {
+	public:
+
+		Driver(const int port):m_Joystick{port}{}; // sets the driver port #
+
+		bool field_relative; // determines if the robot will be field relative
+
+		bool gyro_reset; // determines if a gyro reset should be done
+
+		bool trigger_one; // determines if trigger_one is pressed
+		bool trigger_two;
+
+		bool rotateTowardTag; // determines if robot should rotate towards april tag 
+
+		//bool targetNearestAprilTag; probably useless
+
+		double throttle; // controlls speed
+
+		// direction controlls
+		double forward;
+		double strafe;  
+		double rotate;
+
+		// determines if the robot should auto align to left/right coral
+		bool leftCoral;
+		bool rightCoral;
+
+
+
+
+		/**
+		 * Update the controller variables 
+		 * @attention Each control scheme is defined in this function
+		 * @note Automaically chooses the control scheme based on the joystick name
+		*/
+		void update(){
+
+			// Control Scheme Definitions
+			if(m_Joystick.GetName() == std::string{"X52 H.O.T.A.S."}){ // changes controlls based on controller name
+				field_relative = !m_Joystick.GetRawButton(1); // sets field_relative to the opposite value of button #1 (bindings can be seen in driver station)
+
+				gyro_reset = m_Joystick.GetRawButton(2);
+
+				//trigger_one = m_Joystick.GetRawButton(1);
+				//trigger_two = m_Joystick.GetRawButton(15);
+
+				rotateTowardTag = m_Joystick.GetRawButton(5);
+
+				throttle = (-m_Joystick.GetZ() + 1) / 2;
+				/*
+				if(!targetNearestAprilTag){
+					forward = m_Joystick.GetY();
+					strafe = m_Joystick.GetX();
+					rotate = m_Joystick.GetRawAxis(5);
+				}
+				*/
+
+
+				rightCoral = m_Joystick.GetRawButton(3);
+				leftCoral = m_Joystick.GetRawButton(4);
+
+
+			}
+
+			if(m_Joystick.GetName() == std::string{"Extreme 3D pro"}){
+				//field_relative = !m_Joystick.GetRawButton(2);
+
+				gyro_reset = m_Joystick.GetRawButton(3);
+
+				trigger_one = m_Joystick.GetRawButton(1);
+
+				//rotateTowardTag = m_Joystick.GetRawButton(5);
+				throttle = (-m_Joystick.GetThrottle() + 1) / 2;
+
+				forward = m_Joystick.GetY();
+				strafe = m_Joystick.GetX();
+				rotate = m_Joystick.GetTwist();
+
+				rightCoral = m_Joystick.GetRawButton(6);
+				leftCoral = m_Joystick.GetRawButton(5);
+
+			}
+
+
+				// Controller values and optimizations
+				forward = (-m_forwardLimiter.Calculate(frc::ApplyDeadband(forward, forward_deadzone)) * throttle);
+				strafe = (-m_strafeLimiter.Calculate(frc::ApplyDeadband(strafe, strafe_deadzone)) * throttle);
+				
+				if(trigger_one && !trigger_two){
+					rotate = 0.75 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else if(trigger_one && trigger_two){
+					rotate = (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}else{
+					rotate = 0.4 * (-m_rotateLimiter.Calculate(frc::ApplyDeadband(rotate, rotate_deadzone)) * sqrt(throttle));
+				}
+		}
+
+		private:
+			frc::Joystick m_Joystick; // creates a Joystick
+
+			frc::SlewRateLimiter<units::dimensionless::scalar> m_forwardLimiter{3 / 1_ms};
+			frc::SlewRateLimiter<units::dimensionless::scalar> m_strafeLimiter{3 / 1_ms};
+			frc::SlewRateLimiter<units::dimensionless::scalar> m_rotateLimiter{3 / 1_ms};
+
+			// sets deadzones for different values
+			double forward_deadzone = 0.15;
+			double strafe_deadzone  = 0.3;
+			double rotate_deadzone  = 0.1;
+	};
+
+class Operator : public frc2::SubsystemBase {
+	public:
+
+		Operator(const int port):m_XboxController{port}{};
+
+		bool shootCoral;
+		bool reverseCoral;
+		bool pickUpAlgae;
+		bool winchDown;
+		bool winchUp;
+		bool dropAlgae;
+		bool punchAlgae;
+		bool dropPunch;
+
+
+		void update(){
+			pickUpAlgae = m_XboxController.GetAButton();
+			dropAlgae = m_XboxController.GetXButton();
+			shootCoral = m_XboxController.GetBButton();
+			reverseCoral = m_XboxController.GetYButton();
+
+			punchAlgae = m_XboxController.GetLeftTriggerAxis() > 0.1; // activates on axis moving slightly
+			dropPunch = m_XboxController.GetRightTriggerAxis() > 0.1;
+
+			winchUp = m_XboxController.GetLeftBumperButton();
+			winchDown = m_XboxController.GetRightBumperButton();
+
+		}
+
+		
+	private:
+		frc::XboxController m_XboxController; // creates a XboxController
+};
+
