@@ -38,30 +38,20 @@ void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger resetGyro([this] { return m_driver.gyro_reset; });
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
 
-	frc2::Trigger leftCoral([this] { return m_driver.leftCoral; });
-	leftCoral.OnTrue(m_drive.AutoAlignLeft(&m_drive).ToPtr());
+	frc2::Trigger climberUp([this] { return m_operator.climberUp; });
+	climberUp.OnTrue(m_mechanism.hangUp().ToPtr());
 
-	frc2::Trigger rightCoral([this] { return m_driver.rightCoral; });
-	rightCoral.OnTrue(m_drive.AutoAlignRight(&m_drive).ToPtr());
+	frc2::Trigger climberDown([this] { return m_operator.climberDown; });
+	climberDown.OnTrue(m_mechanism.hangDown().ToPtr());
 
-	frc2::Trigger elevatorUp([this] { return m_operator.elevatorUp; });
-	elevatorUp.WhileTrue(m_mechanism.coralElevatorUp().ToPtr());
+	frc2::Trigger elevatorLow([this] { return m_operator.elevatorLow; });
+	elevatorLow.OnTrue(m_mechanism.elevatorLow().ToPtr());
 
-	frc2::Trigger elevatorDown([this] { return m_operator.elevatorDown; });
-	elevatorDown.WhileTrue(m_mechanism.coralElevatorDown().ToPtr());
+	frc2::Trigger elevatorMid([this] { return m_operator.elevatorMid; });
+	elevatorMid.OnTrue(m_mechanism.elevatorMid().ToPtr());
 
-	frc2::Trigger punchUp([this] { return m_operator.punchUp; });
-	punchUp.WhileTrue(m_mechanism.algaePunchUp().ToPtr());
-
-	frc2::Trigger punchDown([this] { return m_operator.punchDown; });
-	punchDown.WhileTrue(m_mechanism.algaePunchDown().ToPtr());
-
-	frc2::Trigger armDown([this] { return m_operator.armDown; });
-	armDown.WhileTrue(m_mechanism.coralArmPassiveDown().ToPtr());
-
-	frc2::Trigger armUp([this] { return m_operator.armUp; });
-	armUp.WhileTrue(m_mechanism.coralArmPassiveUp().ToPtr());
-
+	frc2::Trigger elevatorHigh([this] { return m_operator.elevatorHigh; });
+	elevatorHigh.OnTrue(m_mechanism.elevatorHigh().ToPtr());
 
 }
 

@@ -1,37 +1,59 @@
 #include "subsystems/Mechanism/Coral.hpp"
-units::angle::turn_t elevatorMin = 0_tr;
-units::angle::turn_t elevatorMax = 100_tr;
 
 
-CoralElevator::CoralElevator(): m_coralElevatorMotor{Mechanism::Coral::Elevator}{
-    coralElevatorMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
-    coralElevatorMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
-    coralElevatorMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
-    m_coralElevatorMotor.GetConfigurator().Apply(coralElevatorMotorConfig);
+Climber::Climber(): m_climberMotor{Mechanism::Coral::Climber}{
+    climberMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    climberMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    climberMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+    m_climberMotor.GetConfigurator().Apply(climberMotorConfig);
 }
 
-CoralArm::CoralArm(): m_coralArmMotor{Mechanism::Coral::Arm}{
-    coralArmMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
-    coralArmMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
-    coralArmMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
-    m_coralArmMotor.GetConfigurator().Apply(coralArmMotorConfig);
+Elevator::Elevator() {
+    elevatorLeftMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    elevatorLeftMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    elevatorLeftMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+    
+    elevatorRightMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    elevatorRightMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+    elevatorRightMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+    
+    elevatorEncoderConfig.MagnetSensor.WithAbsoluteSensorDiscontinuityPoint(units::angle::turn_t(1)); // implicit typing turns the 2 into an angle value
+    elevatorEncoderConfig.MagnetSensor.WithSensorDirection(ctre::phoenix6::signals::SensorDirectionValue::Clockwise_Positive);
+    
+    m_elevatorEncoder.GetConfigurator().Apply(elevatorEncoderConfig);
+
+    elevatorLeftMotorConfig.Feedback.WithRemoteCANcoder(m_elevatorEncoder);
+    elevatorRightMotorConfig.Feedback.WithRemoteCANcoder(m_elevatorEncoder);
+    
+    m_elevatorLeft.GetConfigurator().Apply(elevatorLeftMotorConfig);
+    m_elevatorRight.GetConfigurator().Apply(elevatorRightMotorConfig);
+    
+
 }
 
-void CoralArm::setCoralArm(double speed){    
-    m_coralArmMotor.Set(speed);   
+void Climber::setClimber(double speed){
+    m_climberMotor.Set(speed);
 }
 
 
-void CoralElevator::setCoralElevator(double speed){    
-    m_coralElevatorMotor.Set(speed);   
+void Elevator::setElevatorTarget(units::angle::turn_t goal){
+    
+    m_elevatorLeft.SetPosition(m_elevatorEncoder.GetAbsolutePosition().GetValue());
+    m_elevatorRight.SetPosition(m_elevatorEncoder.GetAbsolutePosition().GetValue());
+
+    
+    ctre::phoenix6::controls::PositionDutyCycle Cycle(goal);
+    m_elevatorLeft.SetControl(Cycle.WithPosition(goal));
+    m_elevatorRight.SetControl(Cycle.WithPosition(goal));
+    
+
+   /* m_elevatorLeft.Set(goal);
+    m_elevatorRight.Set(goal);*/
 }
 
-int CoralElevator::canGoUp(){
-    frc::SmartDashboard::PutNumber("Also Arm Position", m_coralElevatorMotor.GetPosition().GetValueAsDouble());
-    if((m_coralElevatorMotor.GetPosition().GetValue()) < elevatorMax) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
+    
+
+
+
+
 

@@ -4,13 +4,15 @@
 #include "RobotBase/specifications/RobotSpecifications.hpp"
 namespace Mechanism {
 	namespace Algae{
-		static constexpr int Puncher = 14;
+		
 	}
 	namespace Coral{
-		static constexpr int Arm = 15;
-		static constexpr int Elevator = 16;
+		static constexpr int elevatorLeft = 14;
+		static constexpr int elevatorRight = 15;
 		static constexpr int LimitDown = 0;
 		static constexpr int LimitUp = 1;
+		static constexpr int Climber = 17;
+		static constexpr int elevatorCancoder = 16;
 	}
 	
 }

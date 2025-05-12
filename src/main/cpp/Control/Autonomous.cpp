@@ -64,7 +64,6 @@ frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctio
 				
 				frc2::ParallelRaceGroup(
                     frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
-					mechFunctions->coralElevatorUp(),
 
                     frc2::WaitCommand(2_s)
                 ),

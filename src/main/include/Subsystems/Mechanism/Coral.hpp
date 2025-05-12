@@ -3,27 +3,34 @@
 
 #include "headers/Headers.hpp"
 
-class CoralElevator : public frc2::SubsystemBase {
-	public:
-		CoralElevator();
 
-		void setCoralElevator(double speed);
-		int canGoUp();
+class Climber : public frc2::SubsystemBase {
+	public:
+		Climber();
+
+		void setClimber(double speed);
 
 	private:
-		ctre::phoenix6::hardware::TalonFX m_coralElevatorMotor;
-	    ctre::phoenix6::configs::TalonFXConfiguration coralElevatorMotorConfig{};
+		ctre::phoenix6::hardware::TalonFX m_climberMotor;
+	    ctre::phoenix6::configs::TalonFXConfiguration climberMotorConfig{};
 };
 
-class CoralArm : public frc2::SubsystemBase {
+class Elevator : public frc2::SubsystemBase {
 	public:
-		CoralArm();
+		Elevator();
 
-		void setCoralArm(double speed);
-
+		void setElevatorTarget(units::angle::turn_t goal);
+		
 	private:
-		ctre::phoenix6::hardware::TalonFX m_coralArmMotor;
-	    ctre::phoenix6::configs::TalonFXConfiguration coralArmMotorConfig{};
+		ctre::phoenix6::hardware::TalonFX m_elevatorLeft{Mechanism::Coral::elevatorLeft};
+		ctre::phoenix6::hardware::TalonFX m_elevatorRight{Mechanism::Coral::elevatorRight};
+		ctre::phoenix6::hardware::CANcoder m_elevatorEncoder{Mechanism::Coral::elevatorCancoder};
+
+		ctre::phoenix6::configs::TalonFXConfiguration elevatorLeftMotorConfig{};
+		ctre::phoenix6::configs::TalonFXConfiguration elevatorRightMotorConfig{};
+		ctre::phoenix6::configs::CANcoderConfiguration elevatorEncoderConfig{};
+
 };
+
 
 #endif
