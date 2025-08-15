@@ -125,19 +125,20 @@ class Operator : public frc2::SubsystemBase {
 		bool punchDown;
 		bool armUp;
 		bool armDown;
-
-
+		bool climberUp;
+		bool climberDown;
+		bool elevatorLow;
+		bool elevatorMid;
+		bool elevatorHigh;
 		void update(){
+		
 
-			punchUp = m_XboxController.GetLeftTriggerAxis() > 0.1;
-			punchDown = m_XboxController.GetRightTriggerAxis() > 0.1;
+			elevatorLow = m_XboxController.GetAButton();
+			elevatorMid = m_XboxController.GetXButton();
+			elevatorHigh = m_XboxController.GetYButton();
 
-			elevatorUp = m_XboxController.GetLeftBumperButton();
-			elevatorDown = m_XboxController.GetRightBumperButton();
-
-			armUp = m_XboxController.GetBButton();
-			armDown = m_XboxController.GetAButton();
-
+			climberUp = m_XboxController.GetRawButton(7);
+			climberDown = m_XboxController.GetRawButton(8);
 
 
 		}

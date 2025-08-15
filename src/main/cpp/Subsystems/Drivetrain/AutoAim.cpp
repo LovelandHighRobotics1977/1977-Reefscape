@@ -24,7 +24,7 @@ void AimFunctions::determineValues() {
 	distance =  nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("targetpose_cameraspace",{})[2];
 	rotation =  nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("targetpose_cameraspace",{})[5];
 	cTarget = nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tid", -1);
-
+	
 
 	if ((cTarget>=6 && cTarget<=11 )|| (cTarget>=17 && cTarget<=22)){
 
@@ -34,7 +34,7 @@ void AimFunctions::determineValues() {
 			sideSpeed = -1.5;
 		}else{
 			sideSpeed =0;
-		}
+		} 
 
 		if(distance>=distanceTarget+errorVal){
 			forwardSpeed = 3;
