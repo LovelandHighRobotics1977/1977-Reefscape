@@ -33,10 +33,26 @@ class Elevator : public frc2::SubsystemBase {
 		ctre::phoenix6::configs::TalonFXConfiguration elevatorRightMotorConfig{};
 		ctre::phoenix6::configs::CANcoderConfiguration elevatorEncoderConfig{};
 
+
 		frc::PIDController motorPID{0.0 , 0.0, 0.0};
 
 		//frc::SimpleMotorFeedforward<units::radians> feedforward(kP, kV, kA);
 		frc::PIDController m_feedforward{0.1, 0.0, 0.0};
+
+};
+
+class coralArm : private frc2::SubsystemBase {
+	public:
+		coralArm();
+
+		void setCoralAngle(double speed);
+		void setCoralIntake(double speed);
+	private:
+		ctre::phoenix6::hardware::TalonFX m_coralArmAngle{Mechanism::Coral::coralArmAngle};
+		ctre::phoenix6::hardware::TalonFX m_coralArmIntake{Mechanism::Coral::coralArmIntake};
+		
+		ctre::phoenix6::configs::TalonFXConfiguration coralArmAngleConfig{};
+		ctre::phoenix6::configs::TalonFXConfiguration coralArmIntakeConfig{};
 
 };
 

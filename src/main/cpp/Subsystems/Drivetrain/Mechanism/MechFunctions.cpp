@@ -23,6 +23,46 @@ frc2::SequentialCommandGroup MechFunctions::hangDown(){
 }
 
 
+frc2::SequentialCommandGroup MechFunctions::coralArmDown(){
+	return frc2::SequentialCommandGroup(
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([this] { m_coralArmAngle.setCoralAngle(-0.3); }),
+			frc2::WaitCommand(0.2_s)
+		),
+		frc2::InstantCommand([this] { m_coralArmAngle.setCoralAngle(0); })
+	);
+}
+
+frc2::SequentialCommandGroup MechFunctions::coralArmUp(){
+	return frc2::SequentialCommandGroup(
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([this] { m_coralArmAngle.setCoralAngle(0.3); }),
+			frc2::WaitCommand(0.2_s)
+		),
+		frc2::InstantCommand([this] { m_coralArmAngle.setCoralAngle(0); })
+	);
+}
+
+frc2::SequentialCommandGroup MechFunctions::coralIntake(){
+	return frc2::SequentialCommandGroup(
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([this] { m_coralArmIntake.setCoralIntake(0.3); }),
+			frc2::WaitCommand(0.2_s)
+		),
+		frc2::InstantCommand([this] { m_coralArmIntake.setCoralIntake(0); })
+	);
+}
+
+frc2::SequentialCommandGroup MechFunctions::coralOutake(){
+	return frc2::SequentialCommandGroup(
+		frc2::ParallelRaceGroup(
+			frc2::RunCommand([this] { m_coralArmIntake.setCoralIntake(-0.3); }),
+			frc2::WaitCommand(0.2_s)
+		),
+		frc2::InstantCommand([this] { m_coralArmIntake.setCoralIntake(0); })
+	);
+}
+
 
 frc2::SequentialCommandGroup MechFunctions::elevatorLow(){
 	return frc2::SequentialCommandGroup(

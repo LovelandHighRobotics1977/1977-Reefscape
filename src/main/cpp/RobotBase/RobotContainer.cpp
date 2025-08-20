@@ -53,6 +53,22 @@ void RobotContainer::ConfigureButtonBindings() {
 	frc2::Trigger elevatorHigh([this] { return m_operator.elevatorHigh; });
 	elevatorHigh.OnTrue(m_mechanism.elevatorHigh().ToPtr());
 
+	frc2::Trigger coralArmUp([this] { return m_operator.coralArmUp; });
+	coralArmUp.OnTrue(m_mechanism.coralArmUp().ToPtr());
+
+	frc2::Trigger coralArmDown([this] { return m_operator.coralArmDown; });
+	coralArmDown.OnTrue(m_mechanism.coralArmDown().ToPtr());
+
+	frc2::Trigger coralIntake([this] { return m_operator.coralIntake; });
+	coralIntake.OnTrue(m_mechanism.coralIntake().ToPtr());
+
+	frc2::Trigger coralOutake([this] { return m_operator.coralOutake; });
+	coralOutake.OnTrue(m_mechanism.coralOutake().ToPtr());
+
+	
+
+
+
 }
 
 void RobotContainer::ConfigureAutonomousChooser() {

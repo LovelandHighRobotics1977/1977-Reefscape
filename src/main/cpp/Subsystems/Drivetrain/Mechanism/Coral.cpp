@@ -53,6 +53,29 @@ void Climber::setClimber(double speed){
     m_climberMotor.Set(speed);
 }
 
+coralArm::coralArm(){
+    coralArmAngleConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    coralArmAngleConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+    coralArmAngleConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+
+    coralArmIntakeConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    coralArmIntakeConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    coralArmIntakeConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+
+    m_coralArmAngle.GetConfigurator().Apply(coralArmAngleConfig);
+    m_coralArmIntake.GetConfigurator().Apply(coralArmIntakeConfig);
+}
+
+void coralArm::setCoralAngle(double speed){
+    m_coralArmAngle.Set(speed);
+}
+
+void coralArm::setCoralIntake(double speed){
+    m_coralArmIntake.Set(speed);
+}
+
+
+
 
 void Elevator::setElevatorTarget(double goal){
     

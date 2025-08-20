@@ -130,6 +130,10 @@ class Operator : public frc2::SubsystemBase {
 		bool elevatorLow;
 		bool elevatorMid;
 		bool elevatorHigh;
+		bool coralArmUp;
+		bool coralArmDown;
+		bool coralIntake;
+		bool coralOutake;
 		void update(){
 		
 
@@ -139,6 +143,11 @@ class Operator : public frc2::SubsystemBase {
 
 			climberUp = m_XboxController.GetRawButton(7);
 			climberDown = m_XboxController.GetRawButton(8);
+
+			coralIntake = m_XboxController.GetLeftBumper();
+			coralOutake = m_XboxController.GetRightBumper();
+			coralArmUp = m_XboxController.GetLeftTriggerAxis();
+			coralArmDown = m_XboxController.GetRightTriggerAxis();
 
 
 		}
