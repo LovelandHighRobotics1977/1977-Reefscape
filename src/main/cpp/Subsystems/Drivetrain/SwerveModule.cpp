@@ -35,10 +35,10 @@ SwerveModule::SwerveModule(const int driveMotorID,     const int angleMotorID,  
 	m_angleMotor.GetConfigurator().Apply(angleMotorConfig);
 
 	angleEncoderConfig.MagnetOffset = 1_tr-magnetOffset; //was 1-magnetOffset.value();, removing .value() and adding _tr to the one fixed a compile error
-	angleEncoderConfig.AbsoluteSensorDiscontinuityPoint = 1_tr;
+	angleEncoderConfig.AbsoluteSensorDiscontinuityPoint = 0_tr;
 	angleEncoderConfig.SensorDirection = ctre::phoenix6::signals::InvertedValue::Clockwise_Positive;
 	m_angleEncoder.GetConfigurator().Apply(angleEncoderConfig);
-}
+} 
 
 frc::SwerveModuleState SwerveModule::GetState() {
 	return {

@@ -20,7 +20,7 @@ frc2::StartEndCommand MechFunctions::algaeRevReverse(){
 
 frc2::StartEndCommand MechFunctions::coralRev(){
 	return frc2::StartEndCommand(
-		[this] { m_coralIntakeMotor.setCoralIntake(-0.1); } , 
+		[this] { m_coralIntakeMotor.setCoralIntake(-0.3); } , 
 		[this] { m_coralIntakeMotor.setCoralIntake(0); } , 
 		{&m_coralIntakeMotor}
 	);
@@ -28,7 +28,7 @@ frc2::StartEndCommand MechFunctions::coralRev(){
 
 frc2::StartEndCommand MechFunctions::coralRevReverse(){
 	return frc2::StartEndCommand(
-		[this] { m_coralIntakeMotor.setCoralIntake(0.1); } , 
+		[this] { m_coralIntakeMotor.setCoralIntake(0.3); } , 
 		[this] { m_coralIntakeMotor.setCoralIntake(0); } , 
 		{&m_coralIntakeMotor}
 	);
