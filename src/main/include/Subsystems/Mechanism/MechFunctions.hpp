@@ -6,17 +6,18 @@ class MechFunctions : public frc2::SubsystemBase {
 	public:
 		MechFunctions();
 		
-		frc2::SequentialCommandGroup hangUp();
-		frc2::SequentialCommandGroup hangDown();
+		frc2::StartEndCommand hangUp();
+		frc2::StartEndCommand hangDown();
 		
-		frc2::SequentialCommandGroup coralArmUp();
-		frc2::SequentialCommandGroup coralArmDown();
-		frc2::SequentialCommandGroup coralIntake();
-		frc2::SequentialCommandGroup coralOutake();
+		frc2::StartEndCommand coralArmUp();
+		frc2::StartEndCommand coralArmDown();
+		frc2::StartEndCommand coralIntake();
+		frc2::StartEndCommand coralOutake();
 
-		frc2::SequentialCommandGroup elevatorLow();
+		frc2::StartEndCommand elevatorLow();
 		frc2::StartEndCommand elevatorMid();
 		frc2::StartEndCommand elevatorHigh();
+		frc2::StartEndCommand elevatorDownSlow();
 
 	private:
 		Climber m_climberMotor;

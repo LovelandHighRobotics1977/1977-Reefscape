@@ -39,31 +39,34 @@ void RobotContainer::ConfigureButtonBindings() {
 	resetGyro.OnTrue(frc2::InstantCommand( [] {Gyro::GetInstance()->ahrs.Reset();} ).ToPtr());
 
 	frc2::Trigger climberUp([this] { return m_operator.climberUp; });
-	climberUp.OnTrue(m_mechanism.hangUp().ToPtr());
+	climberUp.WhileTrue(m_mechanism.hangUp().ToPtr());
 
 	frc2::Trigger climberDown([this] { return m_operator.climberDown; });
-	climberDown.OnTrue(m_mechanism.hangDown().ToPtr());
+	climberDown.WhileTrue(m_mechanism.hangDown().ToPtr());
 
 	frc2::Trigger elevatorLow([this] { return m_operator.elevatorLow; });
-	elevatorLow.OnTrue(m_mechanism.elevatorLow().ToPtr());
+	elevatorLow.WhileTrue(m_mechanism.elevatorLow().ToPtr());
 
 	frc2::Trigger elevatorMid([this] { return m_operator.elevatorMid; });
-	elevatorMid.OnTrue(m_mechanism.elevatorMid().ToPtr());
+	elevatorMid.WhileTrue(m_mechanism.elevatorMid().ToPtr());
 
 	frc2::Trigger elevatorHigh([this] { return m_operator.elevatorHigh; });
-	elevatorHigh.OnTrue(m_mechanism.elevatorHigh().ToPtr());
+	elevatorHigh.WhileTrue(m_mechanism.elevatorHigh().ToPtr());
 
 	frc2::Trigger coralArmUp([this] { return m_operator.coralArmUp; });
-	coralArmUp.OnTrue(m_mechanism.coralArmUp().ToPtr());
+	coralArmUp.WhileTrue(m_mechanism.coralArmUp().ToPtr());
 
 	frc2::Trigger coralArmDown([this] { return m_operator.coralArmDown; });
-	coralArmDown.OnTrue(m_mechanism.coralArmDown().ToPtr());
+	coralArmDown.WhileTrue(m_mechanism.coralArmDown().ToPtr());
 
 	frc2::Trigger coralIntake([this] { return m_operator.coralIntake; });
-	coralIntake.OnTrue(m_mechanism.coralIntake().ToPtr());
+	coralIntake.WhileTrue(m_mechanism.coralIntake().ToPtr());
 
 	frc2::Trigger coralOutake([this] { return m_operator.coralOutake; });
-	coralOutake.OnTrue(m_mechanism.coralOutake().ToPtr());
+	coralOutake.WhileTrue(m_mechanism.coralOutake().ToPtr());
+
+	frc2::Trigger elevatorDownSlow([this] { return m_operator.elevatorDownSlow; });
+	elevatorDownSlow.WhileTrue(m_mechanism.elevatorDownSlow().ToPtr());
 
 	
 

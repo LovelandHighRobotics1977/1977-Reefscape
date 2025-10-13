@@ -23,28 +23,22 @@ Climber::Climber(): m_climberMotor{Mechanism::Coral::Climber}{
 Elevator::Elevator() {
     motorPID.SetTolerance(0);
 
-    m_elevatorEncoder.SetDistancePerPulse(4.0 / 256.0);
-    m_elevatorEncoder.SetDistancePerPulse(4.0 / 256);
+    /* m_elevatorEncoder.SetDistancePerPulse(4.0 / 256.0);
+    m_elevatorEncoder.SetDistancePerPulse(4.0 / 256); */
 
     elevatorLeftMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     elevatorLeftMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     elevatorLeftMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+    
 
     elevatorRightMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     elevatorRightMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
     elevatorRightMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
     
-    elevatorEncoderConfig.MagnetSensor.WithAbsoluteSensorDiscontinuityPoint(units::angle::turn_t(1)); // implicit typing turns the 2 into an angle value
-    elevatorEncoderConfig.MagnetSensor.WithSensorDirection(ctre::phoenix6::signals::SensorDirectionValue::Clockwise_Positive);
-    
-   /* m_elevatorEncoder.GetConfigurator().Apply(elevatorEncoderConfig);
-    elevatorLeftMotorConfig.Feedback.WithRemoteCANcoder(m_elevatorEncoder);
-    elevatorRightMotorConfig.Feedback.WithRemoteCANcoder(m_elevatorEncoder); */
-
-    
     
     m_elevatorLeft.GetConfigurator().Apply(elevatorLeftMotorConfig);
     m_elevatorRight.GetConfigurator().Apply(elevatorRightMotorConfig);
+    
     
 
 }
@@ -60,10 +54,14 @@ coralArm::coralArm(){
 
     coralArmIntakeConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     coralArmIntakeConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    coralArmIntakeConfig.Commutation.WithMotorArrangement(ctre::phoenix6::signals::MotorArrangementValue::Minion_JST);
     coralArmIntakeConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
+    
 
     m_coralArmAngle.GetConfigurator().Apply(coralArmAngleConfig);
     m_coralArmIntake.GetConfigurator().Apply(coralArmIntakeConfig);
+    
+    
 }
 
 void coralArm::setCoralAngle(double speed){
@@ -71,13 +69,15 @@ void coralArm::setCoralAngle(double speed){
 }
 
 void coralArm::setCoralIntake(double speed){
-    m_coralArmIntake.Set(speed);
+    m_coralArmIntake.SetControl(DutyCycle.WithOutput(speed));
 }
 
 
 
 
 void Elevator::setElevatorTarget(double goal){
+    m_elevatorLeft.Set(goal);
+    m_elevatorRight.Set(goal);
     
     //m_elevatorLeft.SetPosition(m_elevatorEncoder.GetAbsolutePosition().GetValue());
     //m_elevatorRight.SetPosition(m_elevatorEncoder.GetAbsolutePosition().GetValue());
@@ -97,7 +97,9 @@ void Elevator::setElevatorTarget(double goal){
         units::volt_t(motorPID.Calculate (
             m_elevatorEncoder.GetRate())));
     */
-    m_elevatorRight.Set(m_feedforward.Calculate(m_elevatorEncoder.GetDistance(), goal));
+    
+    //m_elevatorRight.SetControl(ctre::phoenix6::controls::PositionDutyCycle)
+    
     //Code to use if we can get any current options to work. Blueprint to hard code it 
 
     // double elevatorPos = m_elevatorEncoder.GetPosition().GetValueAsDouble();
@@ -122,6 +124,7 @@ void Elevator::setElevatorTarget(double goal){
 
         }
     } */
+
 }
 
     

@@ -134,24 +134,26 @@ class Operator : public frc2::SubsystemBase {
 		bool coralArmDown;
 		bool coralIntake;
 		bool coralOutake;
+		bool elevatorDownSlow;
 		void update(){
 		
 
 			elevatorLow = m_XboxController.GetAButton();
 			elevatorMid = m_XboxController.GetXButton();
 			elevatorHigh = m_XboxController.GetYButton();
+			elevatorDownSlow = m_XboxController.GetBButton();
 
 			climberUp = m_XboxController.GetRawButton(7);
 			climberDown = m_XboxController.GetRawButton(8);
 
-			coralIntake = m_XboxController.GetLeftBumper();
-			coralOutake = m_XboxController.GetRightBumper();
+			coralIntake = m_XboxController.GetLeftBumperButton();
+			coralOutake = m_XboxController.GetRightBumperButton();
 			coralArmUp = m_XboxController.GetLeftTriggerAxis();
 			coralArmDown = m_XboxController.GetRightTriggerAxis();
 
 
 		}
-
+ 
 		
 	private:
 		frc::XboxController m_XboxController;

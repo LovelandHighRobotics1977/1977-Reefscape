@@ -27,11 +27,9 @@ class Elevator : public frc2::SubsystemBase {
 		bool isAbove = false;
 		ctre::phoenix6::hardware::TalonFX m_elevatorLeft{Mechanism::Coral::elevatorLeft};
 		ctre::phoenix6::hardware::TalonFX m_elevatorRight{Mechanism::Coral::elevatorRight};
-		frc::Encoder m_elevatorEncoder{0,1};
 
 		ctre::phoenix6::configs::TalonFXConfiguration elevatorLeftMotorConfig{};
 		ctre::phoenix6::configs::TalonFXConfiguration elevatorRightMotorConfig{};
-		ctre::phoenix6::configs::CANcoderConfiguration elevatorEncoderConfig{};
 
 
 		frc::PIDController motorPID{0.0 , 0.0, 0.0};
@@ -49,10 +47,11 @@ class coralArm : private frc2::SubsystemBase {
 		void setCoralIntake(double speed);
 	private:
 		ctre::phoenix6::hardware::TalonFX m_coralArmAngle{Mechanism::Coral::coralArmAngle};
-		ctre::phoenix6::hardware::TalonFX m_coralArmIntake{Mechanism::Coral::coralArmIntake};
+		ctre::phoenix6::hardware::TalonFXS m_coralArmIntake{Mechanism::Coral::coralArmIntake};
+		ctre::phoenix6::controls::DutyCycleOut DutyCycle{0.0};
 		
 		ctre::phoenix6::configs::TalonFXConfiguration coralArmAngleConfig{};
-		ctre::phoenix6::configs::TalonFXConfiguration coralArmIntakeConfig{};
+		ctre::phoenix6::configs::TalonFXSConfiguration coralArmIntakeConfig{};
 
 };
 

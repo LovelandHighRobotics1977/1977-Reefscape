@@ -1,6 +1,6 @@
 #include "subsystems/Mechanism/Algae.hpp"
 
-AlgaePunch::AlgaePunch() : m_algaePunchMotor{Mechanism::Algae::Puncher}{
+/*AlgaePunch::AlgaePunch() : m_algaePunchMotor{Mechanism::Algae::Puncher}{
     algaePunchMotorConfig.MotorOutput.WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
     algaePunchMotorConfig.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     algaePunchMotorConfig.CurrentLimits.WithSupplyCurrentLimit(static_cast<units::current::ampere_t>(20));
@@ -9,4 +9,4 @@ AlgaePunch::AlgaePunch() : m_algaePunchMotor{Mechanism::Algae::Puncher}{
 
 void AlgaePunch::setAlgaePunch(double speed){
     m_algaePunchMotor.Set(speed);
-}
+}*/
