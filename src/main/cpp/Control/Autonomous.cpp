@@ -61,37 +61,18 @@ frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctio
         drive->ZeroOdometry({0_m, 0_m, 0_deg}),
 		frc2::SequentialCommandGroup(
 				frc2::InstantCommand([drive] { drive->Drive({});}),
+				
 				frc2::ParallelRaceGroup(
                     frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
 
                     frc2::WaitCommand(2_s)
                 ),
-
-
 				frc2::ParallelRaceGroup(
-                    frc2::RunCommand([drive] { drive->Drive({4_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
 
+                    frc2::RunCommand([drive] { drive->Drive({6_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
                     frc2::WaitCommand(1_s)
                 ),
-				frc2::ParallelRaceGroup(
-
-                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 80_deg_per_s, 0});}, {drive}), 
-                    frc2::WaitCommand(2_s)
-                ),
-				frc2::ParallelRaceGroup(
-
-                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
-                    frc2::WaitCommand(1_s)
-                ),
-				frc2::InstantCommand([drive] { drive->Drive({});}),
-				frc2::ParallelRaceGroup(
-					mechFunctions->elevatorHigh(),
-					frc2::WaitCommand(1.8_s)
-				),
-				frc2::ParallelRaceGroup(
-					mechFunctions->elevatorMid(),
-					frc2::WaitCommand(0.5_s)
-				)
+				frc2::InstantCommand([drive] { drive->Drive({});})
 
 		)
 	).ToPtr();

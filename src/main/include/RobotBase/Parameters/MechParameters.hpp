@@ -12,6 +12,7 @@ namespace Mechanism {
 		static constexpr int LimitDown = 0;
 		static constexpr int LimitUp = 1;
 		static constexpr int Climber = 17;
+		static constexpr int elevatorCancoder = 16;
 		static constexpr int coralArmAngle = 18;
 		static constexpr int coralArmIntake = 19;
 	}

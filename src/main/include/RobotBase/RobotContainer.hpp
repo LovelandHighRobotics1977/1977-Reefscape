@@ -26,8 +26,8 @@ class RobotContainer {
 
 	// Subsystems
 		DriveSubsystem m_drive;
-		MechFunctions m_mechanism;
 
+		MechFunctions m_mechanism;
 
 	// Network Tables
 

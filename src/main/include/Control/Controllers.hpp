@@ -130,18 +130,18 @@ class Operator : public frc2::SubsystemBase {
 		bool elevatorLow;
 		bool elevatorMid;
 		bool elevatorHigh;
+		bool elevatorMove;
 		bool coralArmUp;
 		bool coralArmDown;
 		bool coralIntake;
 		bool coralOutake;
-		bool elevatorDownSlow;
 		void update(){
 		
 
 			elevatorLow = m_XboxController.GetAButton();
 			elevatorMid = m_XboxController.GetXButton();
-			elevatorHigh = m_XboxController.GetYButton();
-			elevatorDownSlow = m_XboxController.GetBButton();
+			//elevatorHigh = m_XboxController.GetYButton();
+			elevatorMove= m_XboxController.GetYButton();
 
 			climberUp = m_XboxController.GetRawButton(7);
 			climberDown = m_XboxController.GetRawButton(8);
@@ -153,7 +153,7 @@ class Operator : public frc2::SubsystemBase {
 
 
 		}
- 
+
 		
 	private:
 		frc::XboxController m_XboxController;

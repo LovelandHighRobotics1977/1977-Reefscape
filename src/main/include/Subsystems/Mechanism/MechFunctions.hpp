@@ -1,29 +1,32 @@
-#pragma once
-
+#ifndef _Mech_Functions_H
+#define _Mech_Functions_H
 #include "subsystems/Mechanism/Coral.hpp"
-
+//bool isAbove=false;	
 class MechFunctions : public frc2::SubsystemBase {
 	public:
 		MechFunctions();
 		
-		frc2::StartEndCommand hangUp();
-		frc2::StartEndCommand hangDown();
+		frc2::SequentialCommandGroup hangUp();
+		frc2::SequentialCommandGroup hangDown();
 		
-		frc2::StartEndCommand coralArmUp();
-		frc2::StartEndCommand coralArmDown();
-		frc2::StartEndCommand coralIntake();
-		frc2::StartEndCommand coralOutake();
+		frc2::SequentialCommandGroup coralArmUp();
+		frc2::SequentialCommandGroup coralArmDown();
+		frc2::SequentialCommandGroup coralIntake();
+		frc2::SequentialCommandGroup coralOutake();
 
-		frc2::StartEndCommand elevatorLow();
+		frc2::SequentialCommandGroup elevatorLow();
 		frc2::StartEndCommand elevatorMid();
-		frc2::StartEndCommand elevatorHigh();
-		frc2::StartEndCommand elevatorDownSlow();
-
+		frc2::SequentialCommandGroup elevatorHigh();
+		frc2::SequentialCommandGroup elevatorMove();
+	
+		
 	private:
 		Climber m_climberMotor;
-		Elevator m_elevator;
 		coralArm m_coralArmAngle;
 		coralArm m_coralArmIntake;
-
+		Elevator m_elevatorRight;
+		Elevator m_elevatorLeft;
+		Elevator m_elevator;
+        
 };
-
+#endif
