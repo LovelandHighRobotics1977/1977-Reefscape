@@ -4,8 +4,17 @@
 
 #include "Subsystems/Drivetrain/DriveSubsystem.hpp"
 #include "Headers/Headers.hpp"
+#include "Control/Autonomous.hpp" 
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/config/RobotConfig.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/DriverStation.h>
+#include "Subsystems/Drivetrain/DriveSubsystem.hpp"
+#include  "Subsystems/Drivetrain/Commands.hpp"
 
-
+using namespace pathplanner;
 DriveSubsystem::DriveSubsystem()
    :m_frontLeft{Drivetrain::Module::Front::Left::Drive,
 				Drivetrain::Module::Front::Left::Angle,
@@ -31,7 +40,29 @@ DriveSubsystem::DriveSubsystem()
 				DriveSubsystem::GetHeading(),
 				{m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
 				m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-				frc::Pose2d{}} {}
+				frc::Pose2d{}} 
+	{
+	RobotConfig config = RobotConfig::fromGUISettings();
+    AutoBuilder::configure(
+        [this](){ return this->GetPose(); }, 
+        [this](const frc::Pose2d& pose){  this->resetPose(pose) ;}, 
+        [this](){ return this->getRobotRelativeSpeeds(); }, 
+        [this](const frc::ChassisSpeeds& speeds){this->driveRobotRelative(speeds);}, 
+        std::make_shared<PPHolonomicDriveController>( 
+            PIDConstants(5.0, 0.0, 0.0), // Translation 
+            PIDConstants(5.0, 0.0, 0.0) // Rotation
+        ),
+        config, 
+        [this]() {  
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this
+	);
+	}
 
 void DriveSubsystem::Periodic() {
 	OdometryData data;
@@ -70,7 +101,15 @@ void DriveSubsystem::Drive(DriveData data) {
 	m_rearRight.SetDesiredState(rr);
 
 }
-
+void DriveSubsystem::driveRobotRelative(frc::ChassisSpeeds speeds){
+	auto states = DriveKinematics.ToSwerveModuleStates(speeds, frc::Translation2d{0_in,0_in});
+	DriveKinematics.DesaturateWheelSpeeds(&states, TeleoperatedMode::Parameter::Linear::Velocity);
+	auto [fl, fr, rl, rr] = states;
+	m_frontLeft.SetDesiredState(fl);
+	m_frontRight.SetDesiredState(fr);
+	m_rearLeft.SetDesiredState(rl);
+	m_rearRight.SetDesiredState(rr);
+}
 void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {
 
 	DriveKinematics.DesaturateWheelSpeeds(&desiredStates, AutonomousMode::Parameter::Linear::Velocity);
@@ -80,6 +119,7 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
 	m_rearLeft.SetDesiredState(desiredStates[2]);
 	m_rearRight.SetDesiredState(desiredStates[3]);
 }
+
 
 frc::Rotation2d DriveSubsystem::GetHeading(){
 	switch(frc::DriverStation::GetAlliance().value()){
@@ -97,7 +137,7 @@ frc::Rotation2d DriveSubsystem::GetHeading(){
 	}
 }
 
-frc2::SequentialCommandGroup DriveSubsystem::ZeroOdometry(frc::Pose2d pose) {
+frc2::SequentialCommandGroup DriveSubsystem::resetPose(frc::Pose2d pose) {
 	return frc2::SequentialCommandGroup(
 		frc2::InstantCommand( [this] {Gyro::GetInstance()->ahrs.Reset();} ),
 		frc2::InstantCommand( [this, pose] { DriveSubsystem::ResetOdometry(pose); } )
@@ -119,6 +159,10 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 	data.positions[3] = m_rearRight.GetPosition();
 
 	m_odometry.ResetPosition(data.angle, data.positions, pose);
+}
+
+frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds() {
+	return robotRelativeSpeeds;
 }
 
 void DriveSubsystem::driveFromTagDuringAuto(){
@@ -164,10 +208,3 @@ frc2::SequentialCommandGroup DriveSubsystem::AutoAlignRight(DriveSubsystem *driv
 	);
 }
 // change these into commands that will be ran on button press
-
-
-
-
-
-
-
