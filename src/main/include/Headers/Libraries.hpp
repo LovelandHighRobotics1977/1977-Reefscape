@@ -24,6 +24,7 @@
 #include <ctre/phoenix6/configs/Configurator.hpp>
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/TalonFXS.hpp>
 
 // REV Per-Device Hardware APIs
 #include "rev/config/SparkMaxConfigAccessor.h"

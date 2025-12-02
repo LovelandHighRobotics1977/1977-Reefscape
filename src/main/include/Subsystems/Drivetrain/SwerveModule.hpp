@@ -2,6 +2,8 @@
 #define _SUBSYSTEM_SWERVE_MODULE_H
 
 #include "headers/Headers.hpp"
+//#include "Subsystems/Drivetrain/DriveSubsystem.hpp"
+#include "Subsystems/Mechanism/MechFunctions.hpp"
 
 class SwerveModule {
  public:

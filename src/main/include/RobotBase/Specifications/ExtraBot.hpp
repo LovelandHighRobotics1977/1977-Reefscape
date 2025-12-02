@@ -63,11 +63,11 @@ namespace Drivetrain {
 			}
 		}
 		namespace Front {
-			namespace Left {
-				static constexpr int Drive = 2;
-				static constexpr int Angle = 3;
-				static constexpr int Encoder = 4;
-				static constexpr units::turn_t MagnetOffset = 0.244873_tr;
+			namespace Right {
+				static constexpr int Drive = 8;
+				static constexpr int Angle = 9;
+				static constexpr int Encoder = 10;
+				static constexpr units::turn_t MagnetOffset = -0.427979_tr;
 				/*
 				static constexpr int Drive = 2;
 				static constexpr int Angle = 3;
@@ -79,11 +79,11 @@ namespace Drivetrain {
 					( + (((Measurements::Frame::width)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition
 				};
 			}
-			namespace Right {
-				static constexpr int Drive = 11;
-				static constexpr int Angle = 12;
-				static constexpr int Encoder = 13;
-				static constexpr units::turn_t MagnetOffset = 0.810791_tr;
+			namespace Left {
+				static constexpr int Drive = 5;
+				static constexpr int Angle = 6;
+				static constexpr int Encoder = 7;
+				static constexpr units::turn_t MagnetOffset = -0.772461_tr;
 				/*
 				static constexpr int Drive = 11;
 				static constexpr int Angle = 12;
@@ -97,33 +97,33 @@ namespace Drivetrain {
 			}
 		}
 		namespace Rear {
-			namespace Left {
-			static constexpr int Drive = 5;
-				static constexpr int Angle = 6;
-				static constexpr int Encoder = 7;
-				static constexpr units::turn_t MagnetOffset = 0.745361_tr;
-				/*
+			namespace Right {
+			static constexpr int Drive = 11;
+				static constexpr int Angle = 12;
+				static constexpr int Encoder = 13;
+				static constexpr units::turn_t MagnetOffset = -0.680664_tr;
+				
 				static constexpr int Drive = 5;
 				static constexpr int Angle = 6;
 				static constexpr int Encoder = 7;
-				static constexpr units::turn_t MagnetOffset = 0.745361_tr;
-				*/
+				static constexpr units::turn_t MagnetOffset = -0.745361_tr;
+			
 				static const frc::Translation2d Location = {
 					( - (((Measurements::Frame::length)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( + (((Measurements::Frame::width)/2) - Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition
 				};
 			}
-			namespace Right {
+			namespace Left {
+				static constexpr int Drive = 2;
+				static constexpr int Angle = 3;
+				static constexpr int Encoder = 4;
+				static constexpr units::turn_t MagnetOffset = -0.444873_tr;
+			
 				static constexpr int Drive = 8;
 				static constexpr int Angle = 9;
 				static constexpr int Encoder = 10;
-				static constexpr units::turn_t MagnetOffset = 0.074219_tr;
-				/*
-				static constexpr int Drive = 8;
-				static constexpr int Angle = 9;
-				static constexpr int Encoder = 10;
-				static constexpr units::turn_t MagnetOffset = 0.074219_tr;
-				*/
+				static constexpr units::turn_t MagnetOffset = -0.074219_tr;
+			
 				static const frc::Translation2d Location = {
 					( - (((Measurements::Frame::length)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::xPosition,
 					( - (((Measurements::Frame::width)/2) + Measurements::Wheel::offset)) - Measurements::Gyroscope::yPosition

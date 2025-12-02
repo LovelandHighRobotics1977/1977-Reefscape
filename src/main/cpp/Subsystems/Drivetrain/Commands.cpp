@@ -32,6 +32,6 @@ frc2::SequentialCommandGroup SwerveCommand::FollowPath(DriveSubsystem *drive, fr
 }
 
 frc2::InstantCommand SwerveCommand::ResetOdometry(DriveSubsystem *drive, frc::Pose2d pose) {
-	return frc2::InstantCommand([drive, pose] { drive->ZeroOdometry(pose); });
+	return frc2::InstantCommand([drive, pose] { drive->resetPose(pose); });
 }
 

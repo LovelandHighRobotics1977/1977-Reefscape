@@ -4,6 +4,7 @@
 
 #include "RobotBase/Robot.hpp"
 #include "Control/Autonomous.hpp"
+//what(): AutoBuilder was not configured before attempting to build an auto chooser terminate called after throwing an instance of 'std::runtime_error'
 
 void Robot::RobotInit() {}
 void Robot::RobotPeriodic() { 
@@ -13,6 +14,25 @@ void Robot::RobotPeriodic() {
 void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
+
+/*
+void Robot::AutonomousInit() {
+  m_autonomousCommand = m_container.GetAutonomousCommand();
+
+  if (m_autonomousCommand) {
+    m_autonomousCommand->Schedule();
+  }
+}
+
+void Robot::AutonomousPeriodic() {}
+
+void Robot::AutonomousExit() {}
+
+void Robot::TeleopInit() {
+  if (m_autonomousCommand) {
+    m_autonomousCommand->Cancel();
+  }
+}*/
 
 void Robot::AutonomousInit() {
 	frc::Timer().Restart();

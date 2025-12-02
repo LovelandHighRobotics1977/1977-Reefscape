@@ -4,9 +4,12 @@
 #include "Headers/Headers.hpp"
 #include "Control/Autonomous.hpp"
 #include "subsystems/Mechanism/MechFunctions.hpp"
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 
 class RobotContainer {
 	public:
+			DriveSubsystem m_drive;
+
 		RobotContainer();
 
 		void setAutoValues();
@@ -25,7 +28,7 @@ class RobotContainer {
 		Operator m_operator{TeleoperatedMode::Controller::Ports::Operator};
 
 	// Subsystems
-		DriveSubsystem m_drive;
+		//DriveSubsystem m_drive;
 		MechFunctions m_mechanism;
 
 
@@ -40,6 +43,10 @@ class RobotContainer {
 		frc::SendableChooser<int> c_position;
 		frc::SendableChooser<int> c_target;
 		frc::SendableChooser<int> c_allianceOverride;
+
+		private:
+    /* Path follower */
+    frc::SendableChooser<frc2::Command *> autoChooser;
 };
 
-#endif  // _ROBOT_CONTAINER_H
+#endif  // _ROBOT_CONTAINER

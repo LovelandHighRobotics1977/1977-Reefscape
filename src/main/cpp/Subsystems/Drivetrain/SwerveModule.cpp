@@ -4,6 +4,7 @@
 
 #include "subsystems/Drivetrain/SwerveModule.hpp"
 #include "headers/Headers.hpp"
+#include "Subsystems/Drivetrain/DriveSubsystem.hpp"
 
 SwerveModule::SwerveModule(const int driveMotorID,     const int angleMotorID,       const int angleEncoderID, units::turn_t magnetOffset)
 					  : m_driveMotor{driveMotorID}, m_angleMotor{angleMotorID}, m_angleEncoder{angleEncoderID} {

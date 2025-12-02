@@ -1,4 +1,12 @@
-#include "Control/Autonomous.hpp"
+#include "Control/Autonomous.hpp" 
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/config/RobotConfig.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/DriverStation.h>
+#include "Subsystems/Drivetrain/DriveSubsystem.hpp"
+#include  "Subsystems/Drivetrain/Commands.hpp"
 //In the future, pose estimation will be used to determine the location and accuracy for auto
 //must go forward 224 in. and 136 in left
 
@@ -52,27 +60,45 @@ void AutoFctns::setAutoRoutineValues(int position, int targetR, int targetB, std
 
 }
 
-
 frc2::CommandPtr AutoFctns::autonomousRoutine(DriveSubsystem *drive, MechFunctions *mechFunctions) {
 	//AutoFctns::setAutoRoutineValues(AutoInfo::positionSet, AutoInfo::targetSetA, AutoInfo::colorSet);
 	return frc2::SequentialCommandGroup(
 		
 		//This will reset the gyro
-        drive->ZeroOdometry({0_m, 0_m, 0_deg}),
+        drive->resetPose({0_m, 0_m, 0_deg}),
 		frc2::SequentialCommandGroup(
 				frc2::InstantCommand([drive] { drive->Drive({});}),
-				
 				frc2::ParallelRaceGroup(
                     frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
 
                     frc2::WaitCommand(2_s)
                 ),
-				frc2::ParallelRaceGroup(
 
-                    frc2::RunCommand([drive] { drive->Drive({6_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
+
+				frc2::ParallelRaceGroup(
+                    frc2::RunCommand([drive] { drive->Drive({4_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
+
                     frc2::WaitCommand(1_s)
                 ),
-				frc2::InstantCommand([drive] { drive->Drive({});})
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 80_deg_per_s, 0});}, {drive}), 
+                    frc2::WaitCommand(2_s)
+                ),
+				frc2::ParallelRaceGroup(
+
+                    frc2::RunCommand([drive] { drive->Drive({0_fps, 0_fps, 0_deg_per_s, 0});}, {drive}), 
+                    frc2::WaitCommand(1_s)
+                ),
+				frc2::InstantCommand([drive] { drive->Drive({});}),
+				frc2::ParallelRaceGroup(
+					mechFunctions->elevatorHigh(),
+					frc2::WaitCommand(1.8_s)
+				),
+				frc2::ParallelRaceGroup(
+					mechFunctions->elevatorMid(),
+					frc2::WaitCommand(0.5_s)
+				)
 
 		)
 	).ToPtr();
